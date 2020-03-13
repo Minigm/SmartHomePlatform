@@ -11,7 +11,7 @@ public class UserManager {
     private Connection connection;
     private String sql;
     public UserManager(){
-        ConnectManager connectManager = new ConnectManager(0);
+        ConnectManager connectManager = new ConnectManager();
         connection = connectManager.getConnection();
         sql = "";
     }

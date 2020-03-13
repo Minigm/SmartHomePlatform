@@ -6,8 +6,8 @@ public class CompanyManager {
     private Connection connection;
     private String sql;
     public CompanyManager(){
-        ConnectManager connectManager = new ConnectManager(2);
-        connection = connection;
+        ConnectManager connectManager = new ConnectManager();
+        connection = connectManager.getConnection();
         sql = "";
     }
 }

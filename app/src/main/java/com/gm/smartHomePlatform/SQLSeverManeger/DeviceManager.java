@@ -6,7 +6,7 @@ public class DeviceManager {
     private Connection connection;
     private String sql;
     public DeviceManager(){
-        ConnectManager connectManager = new ConnectManager(1);
+        ConnectManager connectManager = new ConnectManager();
         connection = connectManager.getConnection();
         sql = "";
     }
