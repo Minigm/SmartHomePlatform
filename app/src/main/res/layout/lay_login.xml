@@ -19,6 +19,15 @@
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:visibility="invisible"/>
+    <!--标题提示-->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="用户登录"
+        android:textSize="30sp"
+        android:layout_above="@+id/editUsername_login"
+        android:gravity="center"
+        android:layout_marginBottom="30dp"/>
     <!--密码输入框-->
     <EditText
         android:id="@+id/editPassword_login"

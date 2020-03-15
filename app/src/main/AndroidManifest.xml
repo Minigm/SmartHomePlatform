@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Main.act_company_main"></activity>
-        <activity android:name=".Main.act_admin_main" />
+        <activity android:name=".Administrator.act_admin_main" />
         <activity android:name=".Main.act_user_main" />
         <activity android:name=".Login.act_forget_password" />
         <activity android:name=".Login.act_add_user" />

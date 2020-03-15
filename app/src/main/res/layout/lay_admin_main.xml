@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Main.act_admin_main">
+    tools:context=".Administrator.act_admin_main">
+    <!--用于布局纵向参考线-->
+    <TextView
+        android:id="@+id/textGuidVertical1_add_user"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:visibility="invisible"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

@@ -191,4 +191,18 @@ public class UserManager {
             e.printStackTrace();
         }
     }
+    //删除用户
+    public int deleteUser(String username){
+        if (this.isUser(username)==1){
+            sql = "delete from users where user_name = '"+username+"'";
+            try {
+                connection.createStatement().execute(sql);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return 0;
+        }else {
+            return 1;
+        }
+    }
 }
