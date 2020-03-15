@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.View;
 import android.view.WindowManager;
 
 public class act_admin_main extends AppCompatActivity {
@@ -17,7 +18,7 @@ public class act_admin_main extends AppCompatActivity {
     //子线程处理标志
     private boolean CONNECTION_FLAG = false;
     //子线程处理消息
-    private final int UNKNOWN_SITUATION = 0;
+    private final int UNKNOWN_SITUATION = 0,EXIT = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,7 +29,22 @@ public class act_admin_main extends AppCompatActivity {
         }
         getWindow().setFlags(WindowManager.LayoutParams. FLAG_FULLSCREEN , WindowManager.LayoutParams. FLAG_FULLSCREEN);
     }
-
+    //用户管理按钮响应
+    public void buttonUserAdmin_admin_mainOnClick(View v){
+        ;
+    }
+    //企业管理按钮响应
+    public void buttonCompanyAdmin_admin_mainOnClick(View v){
+        ;
+    }
+    //设备管理按钮响应
+    public void buttonDeviceAdmin_admin_mainOnClick(View v){
+        ;
+    }
+    //退出按钮响应
+    public void buttonExit_admin_mainOnClick(View v){
+        mHandler.sendEmptyMessage(EXIT);
+    }
     //网络处理子线程
     private class InternetThread extends Thread{
         @Override
@@ -54,6 +70,9 @@ public class act_admin_main extends AppCompatActivity {
     //消息处理
     private Handler mHandler = new Handler(){
         public void handleMessage(Message msg){
+            if (msg.what == EXIT){
+                finish();
+            }
         }
     };
 }

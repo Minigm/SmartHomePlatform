@@ -7,9 +7,62 @@
     tools:context=".Administrator.act_admin_main">
     <!--用于布局纵向参考线-->
     <TextView
-        android:id="@+id/textGuidVertical1_add_user"
+        android:id="@+id/textGuidVertical1_admin_main"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="200dp"
+        android:layout_centerInParent="true"
         android:visibility="invisible"/>
-
+    <!--标题提示-->
+    <TextView
+        android:id="@+id/textTitle_admin_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="选择管理对象"
+        android:textSize="30sp"
+        android:layout_above="@+id/textGuidVertical1_admin_main"
+        android:gravity="center"
+        android:layout_marginBottom="60dp" />
+    <!--用户管理按钮-->
+    <Button
+        android:id="@+id/buttonUserAdmin_admin_main"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="用户管理"
+        android:textSize="27sp"
+        android:layout_alignTop="@+id/textGuidVertical1_admin_main"
+        android:layout_centerHorizontal="true"
+        android:onClick="buttonUserAdmin_admin_mainOnClick"/>
+    <!--企业管理按钮-->
+    <Button
+        android:id="@+id/buttonCompanyAdmin_admin_main"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="企业管理"
+        android:textSize="27sp"
+        android:layout_below="@+id/buttonUserAdmin_admin_main"
+        android:layout_marginTop="40sp"
+        android:layout_centerHorizontal="true"
+        android:onClick="buttonCompanyAdmin_admin_mainOnClick"/>
+    <!--设备管理按钮-->
+    <Button
+        android:id="@+id/buttonDeviceAdmin_admin_main"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="设备管理"
+        android:textSize="27sp"
+        android:layout_below="@+id/buttonCompanyAdmin_admin_main"
+        android:layout_marginTop="40sp"
+        android:layout_centerHorizontal="true"
+        android:onClick="buttonDeviceAdmin_admin_mainOnClick"/>
+    <!--退出按钮-->
+    <Button
+        android:id="@+id/buttonExit_admin_main"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="退出"
+        android:textSize="27sp"
+        android:layout_below="@+id/buttonDeviceAdmin_admin_main"
+        android:layout_marginTop="40sp"
+        android:layout_centerHorizontal="true"
+        android:onClick="buttonExit_admin_mainOnClick"/>
 </RelativeLayout>

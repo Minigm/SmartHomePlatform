@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.gm.smartHomePlatform.Administrator.act_admin_main;
 import com.gm.smartHomePlatform.Main.act_user_main;
 import com.gm.smartHomePlatform.R;
 import com.gm.smartHomePlatform.SQLSeverManeger.UserManager;
@@ -149,6 +150,8 @@ public class act_login extends AppCompatActivity {
             }else if (msg.what == ADMIN_SIGNED){
                 Toast to = Toast.makeText(getBaseContext(),"管理员登录快去维护",Toast.LENGTH_LONG);
                 to.show();
+                Intent intent = new Intent(act_login.this, act_admin_main.class);
+                startActivity(intent);
             }else if (msg.what == WRONG_PASSWORD){
                 //密码错误消息处理
                 AlertDialog.Builder ad = new AlertDialog.Builder(act_login.this);
