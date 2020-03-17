@@ -33,14 +33,56 @@ public class DeviceManager {
             e.printStackTrace();
         }
     }
-    public int isDevice(String deviceName,String userName){
+    //用于判断是否存在对应的唯一设备。0，有;1，没有；2，未知错误
+    public int isOnlyDevice(String deviceName,String userName){
+        sql = "select count(*) where device_owner = '"+userName+"' and device_name = '"+deviceName+"'";
         try {
-            sql = "select count(*) where device_owner = '"+userName+"' and device_name = '"+deviceName+"'";
             Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            resultSet.next();
+            if (resultSet.getInt(1) == 0){
+                this.close(statement,resultSet);return 1;
+            }else {
+                this.close(statement,resultSet);return 0;
+            }
         }catch (SQLException e) {
             e.printStackTrace();
         }
-        return 0;
+        return 2;
     }
-
+    //用于判断是否存在对应设备名设备。0，有；1，没有；2，未知错误
+    public int isDeviceName(String deviceName){
+        sql = "select count(*) where device_name = '"+deviceName+"'";
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            resultSet.next();
+            if (resultSet.getInt(1) == 0){
+                this.close(statement,resultSet);return 1;
+            }else {
+                this.close(statement,resultSet);return 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 2;
+    }
+    //用于判断用户是否添加的设备。0，添加了；1，没有；2，未知错误
+    public int isDeviceUser(String userName){
+        sql = "select count(*) where device_owner = '"+userName+"'";
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            resultSet.next();
+            if (resultSet.getInt(1) == 0){
+                this.close(statement,resultSet);return 1;
+            }else {
+                this.close(statement,resultSet);return 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 2;
+    }
+    //获取用户拥有的设备列表。
 }
