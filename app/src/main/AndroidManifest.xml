@@ -11,13 +11,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Administrator.act_admin_device"></activity>
+        <activity android:name=".Administrator.act_admin_device"
+            android:screenOrientation="landscape"/>
         <activity android:name=".Main.act_company_main" />
-        <activity android:name=".Administrator.act_admin_main" />
+        <activity android:name=".Administrator.act_admin_main"
+            android:screenOrientation="portrait"/>
         <activity android:name=".Main.act_user_main" />
-        <activity android:name=".Login.act_forget_password" />
-        <activity android:name=".Login.act_add_user" />
-        <activity android:name=".Login.act_login">
+        <activity android:name=".Login.act_forget_password"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Login.act_add_user"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Login.act_login"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

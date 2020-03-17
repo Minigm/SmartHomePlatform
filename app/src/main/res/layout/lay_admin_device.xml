@@ -1,9 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="horizontal"
     tools:context=".Administrator.act_admin_device">
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!--搜索框-->
+    <SearchView
+        android:id="@+id/searchView_admin_device"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:queryHint="设备名或用户"/>
+    <!--标题栏-->
+    <TextView
+        android:id="@+id/textTitle_admin_device"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/searchView_admin_device"
+        android:text="设备管理"
+        android:textSize="40sp"
+        android:gravity="center"/>
+    <!--用于显示数据库数据-->
+    <TableLayout
+        android:id="@+id/tableLayout_admin_device"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/textTitle_admin_device"
+        android:layout_marginTop="20dp"
+        android:stretchColumns="0,1,2,3">
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="拥有者"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="设备名"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="所属公司"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="所属项目"/>
+        </TableRow>
+    </TableLayout>
+</RelativeLayout>

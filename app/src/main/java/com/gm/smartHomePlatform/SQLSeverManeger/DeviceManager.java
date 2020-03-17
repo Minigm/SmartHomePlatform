@@ -10,4 +10,5 @@ public class DeviceManager {
         connection = connectManager.getConnection();
         sql = "";
     }
+
 }
