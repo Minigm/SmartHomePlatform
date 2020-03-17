@@ -1,9 +1,6 @@
 package com.gm.smartHomePlatform.SQLSeverManeger;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 
 public class DeviceManager {
     private Connection connection;
@@ -13,6 +10,7 @@ public class DeviceManager {
         connection = connectManager.getConnection();
         sql = "";
     }
+<<<<<<< HEAD
     //用于关闭connection关闭
     public void disconnected(){
         try {
@@ -37,4 +35,7 @@ public class DeviceManager {
             sql = "select count(*) where device_owner = '"+userName+"' and device_name = '"+deviceName+"'";
         }
     }
+=======
+
+>>>>>>> parent of fb41088... 多电脑操作test
 }
