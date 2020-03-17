@@ -63,7 +63,7 @@ public class act_admin_device extends AppCompatActivity {
         public void handleMessage(Message msg){
             if (msg.what == CHANGE_TABLE){
                 TableManager tableManager = new TableManager(act_admin_device.this);
-                
+
             }
         }
     };

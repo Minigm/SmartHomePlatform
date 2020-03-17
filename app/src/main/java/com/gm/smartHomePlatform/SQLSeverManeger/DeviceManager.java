@@ -34,7 +34,7 @@ public class DeviceManager {
     }
     public int isDevice(String deviceName,String userName){
         try {
-            sql = "select count(*) where "
+            sql = "select count(*) where device_owner = '"+userName+"' and device_name = '"+deviceName+"'";
         }
     }
 }
