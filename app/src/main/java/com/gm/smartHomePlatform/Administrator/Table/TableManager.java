@@ -25,6 +25,8 @@ public class TableManager extends TableRow {
                 TextView textView = new TextView(getContext());
                 textView.setText((String)object);
                 textView.setGravity(Gravity.CENTER);
+                LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT);
+                textView.setLayoutParams(layoutParams);
                 view = textView;
                 break;
         }

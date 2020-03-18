@@ -3,9 +3,11 @@ package com.gm.smartHomePlatform.Administrator;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.gm.smartHomePlatform.Administrator.Table.TableCompany;
 import com.gm.smartHomePlatform.Administrator.Table.TableDevice;
 import com.gm.smartHomePlatform.Administrator.Table.TableManager;
 import com.gm.smartHomePlatform.R;
+import com.gm.smartHomePlatform.SQLSeverManeger.CompanyManager;
 import com.gm.smartHomePlatform.SQLSeverManeger.DeviceManager;
 
 import android.content.SharedPreferences;
@@ -14,6 +16,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -22,20 +26,20 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class act_admin_device extends AppCompatActivity {
+public class act_admin_company extends AppCompatActivity {
     //用于存储用于表显示的列表
-    List<TableDevice> list = new ArrayList<TableDevice>();
+    List<TableCompany> list = new ArrayList<TableCompany>();
     //子线程进度标志
-    // 0 常态化子线程；1 启动搜索；
+    // 0 常态化子线程；1 启动搜索；2 添加企业
     private int CONNECTION_STATE = 0;
     //子线程处理标志
     private boolean CONNECTION_FLAG = false;
     //子线程处理消息
-    private final int UNKNOWN_SITUATION = 0,CHANGE_TABLE = 1,WRONG_INPUT = 2;
+    private final int UNKNOWN_SITUATION = 0,CHANGE_TABLE = 1,WRONG_INPUT = 2,ADD_COMPANY = 3,BACK_MAIN = 4;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lay_admin_device);
+        setContentView(R.layout.lay_admin_company);
         ActionBar actionBar = getSupportActionBar();
         if(actionBar!=null){
             actionBar.hide();
@@ -48,27 +52,46 @@ public class act_admin_device extends AppCompatActivity {
         editor.putString("main","");
         editor.apply();
         //为搜索控件设置监听
-        SearchView searchView = (SearchView)findViewById(R.id.searchView_admin_device);
-        searchView.setOnQueryTextListener(new myQueryTextListener());
+        SearchView searchView = (SearchView)findViewById(R.id.searchView_admin_company);
+        searchView.setOnQueryTextListener(new act_admin_company.myQueryTextListener());
+        RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.relativeLayout_0_admin_company);
+        relativeLayout.setVisibility(View.VISIBLE);
+        relativeLayout = (RelativeLayout)findViewById(R.id.relativeLayout_1_admin_company);
+        relativeLayout.setVisibility(View.INVISIBLE);
     }
     @Override
     protected void onStart() {
         super.onStart();
         //启动子线程
-        new InternetThread().start();
+        new act_admin_company.InternetThread().start();
         CONNECTION_FLAG = true;
         //初始化显示
-        TextView textView = (TextView)findViewById(R.id.textCount_admin_device);
+        TextView textView = (TextView)findViewById(R.id.textCount_admin_company);
         textView.setText("0");
     }
-    //返回按钮响应
-    public void buttonExit_admin_companyOnClick(View view) {
-        //清空设备列表
-        if (list != null)list.clear();
-        //停止子线程
-        CONNECTION_FLAG = false;
-        finish();
+    public void buttonAddCompany_admin_companyOnClick(View view) {
+        mHandler.sendEmptyMessage(ADD_COMPANY);
     }
+
+    public void buttonConfirmAdd_admin_companyOnClick(View view) {
+        EditText editText = (EditText)findViewById(R.id.editCompanyName_admin_company);
+        String name = editText.getText().toString();
+        editText = (EditText)findViewById(R.id.editCompanyProject_admin_company);
+        String project = editText.getText().toString();
+        editText = (EditText)findViewById(R.id.editCompanyDevice_admin_company);
+        String device = editText.getText().toString();
+        editText = (EditText)findViewById(R.id.editCompanyActs_admin_company);
+        String acts = editText.getText().toString();
+        TableCompany tableCompany = new TableCompany(name,project,device,acts);
+        list.add(tableCompany);
+        CONNECTION_STATE =2;
+    }
+
+    public void buttonExitAdd_admin_companyOnClick(View view) {
+
+        mHandler.sendEmptyMessage(BACK_MAIN);
+    }
+
     //搜索框响应
     private class myQueryTextListener implements SearchView.OnQueryTextListener {
         @Override
@@ -92,12 +115,20 @@ public class act_admin_device extends AppCompatActivity {
             return false;
         }
     }
+    //返回按钮响应
+    public void buttonExit_admin_companyOnClick(View v){
+        //清空设备列表
+        if (list != null)list.clear();
+        //停止子线程
+        CONNECTION_FLAG = false;
+        finish();
+    }
 
     //网络处理子线程
     private class InternetThread extends Thread{
         @Override
         public void run(){
-            DeviceManager deviceManager = new DeviceManager();
+            CompanyManager companyManager = new CompanyManager();
             SharedPreferences sharedPreferences = getSharedPreferences("search_information",MODE_PRIVATE);
             while(CONNECTION_FLAG){
                 switch (CONNECTION_STATE){
@@ -105,7 +136,6 @@ public class act_admin_device extends AppCompatActivity {
                         //0状态挂起，避免退出子线程。
                         break;
                     case 1:
-                    {
                         //1状态处理指令，完成后返回0状态
                         CONNECTION_STATE = 0;
                         //获得共享数据
@@ -114,33 +144,26 @@ public class act_admin_device extends AppCompatActivity {
                         switch (method){
                             case "all":
                                 list.clear();
-                                list.addAll(deviceManager.getAllDevice());
+                                list.addAll(companyManager.getAllCompany());
                                 mHandler.sendEmptyMessage(CHANGE_TABLE);break;
-                            case "拥有者":
+                            case "公司名":
                                 list.clear();
-                                list.addAll(deviceManager.getDeviceUser(main));
+                                list.addAll(companyManager.getCompanyName(main));
                                 mHandler.sendEmptyMessage(CHANGE_TABLE);break;
-                            case "设备名":
+                            case "项目名":
                                 list.clear();
-                                list.addAll(deviceManager.getDeviceName(main));
+                                list.addAll(companyManager.getCompanyProject(main));
                                 mHandler.sendEmptyMessage(CHANGE_TABLE);break;
                             case "设备类型":
                                 list.clear();
-                                list.addAll(deviceManager.getDeviceType(main));
-                                mHandler.sendEmptyMessage(CHANGE_TABLE);break;
-                            case "所属公司":
-                                list.clear();
-                                list.addAll(deviceManager.getDeviceCompany(main));
-                                mHandler.sendEmptyMessage(CHANGE_TABLE);break;
-                            case "所属项目":
-                                list.clear();
-                                list.addAll(deviceManager.getDeviceProject(main));
+                                list.addAll(companyManager.getCompanyDevcie(main));
                                 mHandler.sendEmptyMessage(CHANGE_TABLE);break;
                             default:
                                 //如果没有对应处理方法，发送WRONG_INPUT消息
                                 mHandler.sendEmptyMessage(WRONG_INPUT);break;
-                        }
-                    }break;
+                        }break;
+                    case 2:
+
                 }
             }
         }
@@ -150,12 +173,12 @@ public class act_admin_device extends AppCompatActivity {
         public void handleMessage(Message msg){
             if (msg.what == CHANGE_TABLE){
                 //刷新表格
-                TextView textView = (TextView)findViewById(R.id.textCount_admin_device);
+                TextView textView = (TextView)findViewById(R.id.textCount_admin_company);
                 textView.setText(Integer.toString(list.size()));
-                TableLayout tableLayout = (TableLayout)findViewById(R.id.tableLayout_in_admin_device);
+                TableLayout tableLayout = (TableLayout)findViewById(R.id.tableLayout_in_admin_company);
                 tableLayout.removeAllViews();
                 for (int i = 0;i <list.size();i++){
-                    TableManager tableManager = new TableManager(act_admin_device.this);
+                    TableManager tableManager = new TableManager(act_admin_company.this);
                     tableManager.getTableRow(list.get(i).getStrings());
                     tableLayout.addView(tableManager);
                     tableManager.clearAnimation();
@@ -163,6 +186,16 @@ public class act_admin_device extends AppCompatActivity {
             }else if (msg.what == WRONG_INPUT){
                 //提示指令错误
                 Toast.makeText(getBaseContext(),"不正确的语句",Toast.LENGTH_LONG).show();
+            }else if (msg.what == ADD_COMPANY){
+                RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.relativeLayout_0_admin_company);
+                relativeLayout.setVisibility(View.INVISIBLE);
+                relativeLayout = (RelativeLayout)findViewById(R.id.relativeLayout_1_admin_company);
+                relativeLayout.setVisibility(View.VISIBLE);
+            }else if (msg.what == BACK_MAIN){
+                RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.relativeLayout_0_admin_company);
+                relativeLayout.setVisibility(View.VISIBLE);
+                relativeLayout = (RelativeLayout)findViewById(R.id.relativeLayout_1_admin_company);
+                relativeLayout.setVisibility(View.INVISIBLE);
             }
         }
     };

@@ -32,7 +32,8 @@ public class act_admin_main extends AppCompatActivity {
     }
     //企业管理按钮响应
     public void buttonCompanyAdmin_admin_mainOnClick(View v){
-        ;
+        Intent intent = new Intent(act_admin_main.this,act_admin_company.class);
+        startActivity(intent);
     }
     //设备管理按钮响应
     public void buttonDeviceAdmin_admin_mainOnClick(View v){

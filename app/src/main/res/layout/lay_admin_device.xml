@@ -75,7 +75,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:text="返回"
-        android:onClick="buttonExit_admin_deviceOcClick"/>
+        android:onClick="buttonExit_admin_deviceOnClick"/>
     <TextView
         android:id="@+id/textTitleCount_admin_device"
         android:layout_width="wrap_content"

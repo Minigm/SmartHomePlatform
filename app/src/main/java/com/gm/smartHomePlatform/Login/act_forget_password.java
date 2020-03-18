@@ -29,7 +29,7 @@ public class act_forget_password extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lay_forget_password);
+        setContentView(R.layout.lay_login_forget_password);
         ActionBar actionBar = getSupportActionBar();
         if(actionBar!=null){
             actionBar.hide();

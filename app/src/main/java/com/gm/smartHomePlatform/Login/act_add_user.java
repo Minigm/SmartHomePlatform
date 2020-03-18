@@ -25,7 +25,7 @@ public class act_add_user extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lay_add_user);
+        setContentView(R.layout.lay_login_add_user);
         ActionBar actionBar = getSupportActionBar();
         if(actionBar!=null){
             actionBar.hide();
