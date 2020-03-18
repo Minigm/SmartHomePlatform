@@ -1,8 +1,7 @@
 package com.gm.smartHomePlatform.SQLSeverManeger;
 
-import com.gm.smartHomePlatform.Administrator.Table.SmartHomeDevice;
 import com.gm.smartHomePlatform.Administrator.Table.TableDevice;
-import com.gm.smartHomePlatform.Administrator.Table.TableManager;
+
 
 import java.sql.Connection;
 import java.sql.ResultSet;

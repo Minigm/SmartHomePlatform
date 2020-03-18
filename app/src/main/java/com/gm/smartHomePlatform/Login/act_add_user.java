@@ -41,6 +41,7 @@ public class act_add_user extends AppCompatActivity {
         new InternetThread().start();
         CONNECTION_FLAG = true;
     }
+    //注册按钮响应
     public void buttonSignUp_add_userOnClick(View v){
         SharedPreferences sharedPreferences = getSharedPreferences("signed_information",MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -51,6 +52,7 @@ public class act_add_user extends AppCompatActivity {
         editor.apply();
         CONNECTION_STATE = 1;
     }
+    //退出按钮响应
     public void buttonExit_add_userOnClick(View v){
         CONNECTION_FLAG = false;
         finish();
