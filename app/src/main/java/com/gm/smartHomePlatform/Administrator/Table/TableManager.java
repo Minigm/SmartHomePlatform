@@ -1,51 +1,54 @@
 package com.gm.smartHomePlatform.Administrator.Table;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.gm.smartHomePlatform.R;
+
+import java.util.ArrayList;
 import java.util.List;
 
+
 public class TableManager extends TableRow {
+    //获取上线文环境
     public TableManager(Context context) {
         super(context);
     }
-
-    //private TableRow tableRow;
-    private View createCellView(Object object){
+    //根据输入属性添加视图
+    public View addElement(Object object){
         View view = null;
         String className = object.getClass().toString();
         switch (className){
-            case "java.lang.String":
+            case "class java.lang.String":
                 TextView textView = new TextView(getContext());
-                textView.setGravity(TEXT_ALIGNMENT_CENTER);
                 textView.setText((String)object);
-                view = textView;break;
-            default:
+                textView.setGravity(Gravity.CENTER);
+                view = textView;
                 break;
         }
         return view;
     }
-
-    private List<View> createRowView(Object[] objects){
-        List<View> list = null;
-        View temp = null;
-        for (int i = 0;i<objects.length;i++){
-            temp = this.createCellView(objects[i]);
-            list.add(temp);
+    //对数据组进行添加
+    public List<View> addRowView(Object[] objects){
+        List<View> list = new ArrayList<View>();
+        for (int i = 0;i < objects.length;i++){
+            list.add(addElement(objects[i]));
         }
         return list;
     }
-
-    public void setTableRow(Object[] objects){
-        List<View> list = this.createRowView(objects);
-        for (int i=0;i<list.size();i++){
-            this.addView(list.get(i),i);
+    //生成行视图
+    public TableRow getTableRow(Object[] objects){
+        List<View> list = new ArrayList<View>();
+        list.addAll(this.addRowView(objects));
+        for (int i = 0;i < list.size();i++){
+            this.addView(list.get(i));
         }
-    }
-
-    public TableRow getTableRow(){
         return this;
     }
 }

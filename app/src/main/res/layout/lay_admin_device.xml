@@ -5,13 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    tools:context=".Administrator.act_admin_device">
+    tools:context=".Administrator.act_admin_device"
+    android:id="@+id/relativeLayout_admin_device">
     <!--搜索框-->
     <SearchView
         android:id="@+id/searchView_admin_device"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:queryHint="设备名或用户"/>
+        android:queryHint="[搜索列] [内容](仅输入all列出所有)"/>
     <!--标题栏-->
     <TextView
         android:id="@+id/textTitle_admin_device"
@@ -25,10 +26,10 @@
     <TableLayout
         android:id="@+id/tableLayout_admin_device"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/textTitle_admin_device"
         android:layout_marginTop="20dp"
-        android:stretchColumns="0,1,2,3">
+        android:stretchColumns="0,1,2,3,4">
         <TableRow>
             <TextView
                 android:layout_width="wrap_content"
@@ -44,6 +45,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:text="设备类型"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
                 android:text="所属公司"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -52,4 +58,14 @@
                 android:text="所属项目"/>
         </TableRow>
     </TableLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tableLayout_admin_device">
+        <TableLayout
+            android:id="@+id/tableLayout_in_admin_device"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="0,1,2,3,4"/>
+    </ScrollView>
 </RelativeLayout>
