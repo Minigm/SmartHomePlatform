@@ -50,6 +50,16 @@
         android:inputType="text">
         <requestFocus />
     </EditText>
+    <!--登录按键-->
+    <Button
+        android:id="@+id/buttonSignIn_login"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textGuidVertical1_login"
+        android:layout_toStartOf="@+id/textGuidHorizon1_login"
+        android:text="登录"
+        android:textSize="20sp"
+        android:onClick="buttonSignIn_loginOnClick"/>
     <!--忘记密码跳转文本-->
     <TextView
         android:id="@+id/textForgetPassword_login"
@@ -70,16 +80,6 @@
         android:text="注册"
         android:textSize="18sp"
         android:onClick="textSignUp_loginOcClick"/>
-    <!--登录按键-->
-    <Button
-        android:id="@+id/buttonSignIn_login"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textGuidVertical1_login"
-        android:layout_toStartOf="@+id/textGuidHorizon1_login"
-        android:text="登录"
-        android:textSize="20sp"
-        android:onClick="buttonSignIn_loginOnClick"/>
     <!--退出按键-->
     <Button
         android:id="@+id/buttonExit_login"

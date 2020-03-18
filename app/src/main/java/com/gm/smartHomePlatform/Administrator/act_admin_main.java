@@ -51,8 +51,7 @@ public class act_admin_main extends AppCompatActivity {
             }else if (msg.what == DEVICE_ADMIN){
                 startActivity(new Intent(act_admin_main.this,act_admin_device.class));
             }else if (msg.what == UNKNOWN_SITUATION){
-                Toast to = Toast.makeText(getBaseContext(),"未知错误，请尝试重新操作",Toast.LENGTH_LONG);
-                to.show();
+                Toast.makeText(getBaseContext(),"未知错误，请尝试重新操作",Toast.LENGTH_LONG).show();
             }
         }
     };

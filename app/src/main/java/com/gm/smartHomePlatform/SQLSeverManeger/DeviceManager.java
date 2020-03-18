@@ -39,9 +39,9 @@ public class DeviceManager {
             e.printStackTrace();
         }
     }
-    //用于判断是否存在对应的唯一设备。0，有;1，没有；2，未知错误
-    public int isOnlyDevice(String deviceName,String userName){
-        sql = "select count(*) from devices where device_owner = '"+userName+"' and device_name = '"+deviceName+"'";
+    //用于判断用户是否添加设备。0，添加了；1，没有；2，未知错误
+    public int isDeviceUser(String userName){
+        sql = "select count(*) from devices where device_owner = '"+userName+"'";
         try {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
@@ -51,7 +51,7 @@ public class DeviceManager {
             }else {
                 this.close(statement,resultSet);return 0;
             }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return 2;
@@ -73,9 +73,60 @@ public class DeviceManager {
         }
         return 2;
     }
-    //用于判断用户是否添加设备。0，添加了；1，没有；2，未知错误
-    public int isDeviceUser(String userName){
-        sql = "select count(*) from devices where device_owner = '"+userName+"'";
+    //用于判断是否有该类型的设备。0，添加了；1，没有；2，未知错误
+    public int isDeviceType(String typeName){
+        sql = "select count(*) from devices where device_type = '"+typeName+"'";
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            resultSet.next();
+            if (resultSet.getInt(1) == 0){
+                this.close(statement,resultSet);return 1;
+            }else {
+                this.close(statement,resultSet);return 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 2;
+    }
+    //用于判断企业的设备是否被添加。0，添加了；1，没有；2，未知错误
+    public int isDeviceCompany(String companyName){
+        sql = "select count(*) from devices where device_company = '"+companyName+"'";
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            resultSet.next();
+            if (resultSet.getInt(1) == 0){
+                this.close(statement,resultSet);return 1;
+            }else {
+                this.close(statement,resultSet);return 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 2;
+    }
+    //用于判断企业项目的设备是否被添加。0，添加了；1，没有；2，未知错误
+    public int isDeviceProject(String projectName){
+        sql = "select count(*) from devices where device_project = '"+projectName+"'";
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            resultSet.next();
+            if (resultSet.getInt(1) == 0){
+                this.close(statement,resultSet);return 1;
+            }else {
+                this.close(statement,resultSet);return 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 2;
+    }
+    //用于判断设备列表是否有设备。0，有；1，没有；2，未知错误
+    public int isDeviceAll(){
+        sql = "select count(*) from devices";
         try {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
@@ -156,26 +207,136 @@ public class DeviceManager {
         }
         return list;
     }
+    //获取相同类型的设备
+    public List<TableDevice> getDeviceType(String typeName){
+        List<TableDevice> list = new ArrayList<TableDevice>();
+        switch (this.isDeviceType(typeName)){
+            case 0:
+                TableDevice tableDevice_0 =null;
+                String name,device,company,project;
+                sql = "select * from devices where device_type = '"+typeName+"'";
+                try {
+                    Statement statement = connection.createStatement();
+                    ResultSet resultSet = statement.executeQuery(sql);
+                    while (resultSet.next()){
+                        name = resultSet.getString("device_owner");
+                        device = resultSet.getString("device_name");
+                        company = resultSet.getString("device_company");
+                        project = resultSet.getString("device_project");
+                        tableDevice_0 = new TableDevice(name,device,typeName,company,project);
+                        list.add(tableDevice_0);
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }break;
+            case 1:
+                TableDevice tableDevice_1 = new TableDevice("无对应设备","","","","");
+                list.add(tableDevice_1);
+                break;
+            case 2:
+            default:
+                TableDevice tableDevice_2 = new TableDevice("未知错误","","","","");
+                list.add(tableDevice_2);
+        }
+        return list;
+    }
+    //获取相同公司的设备
+    public List<TableDevice> getDeviceCompany(String companyName){
+        List<TableDevice> list = new ArrayList<TableDevice>();
+        switch (this.isDeviceCompany(companyName)){
+            case 0:
+                TableDevice tableDevice_0 =null;
+                String name,device,type,project;
+                sql = "select * from devices where device_company = '"+companyName+"'";
+                try {
+                    Statement statement = connection.createStatement();
+                    ResultSet resultSet = statement.executeQuery(sql);
+                    while (resultSet.next()){
+                        name = resultSet.getString("device_owner");
+                        device = resultSet.getString("device_name");
+                        type = resultSet.getString("device_type");
+                        project = resultSet.getString("device_project");
+                        tableDevice_0 = new TableDevice(name,device,type,companyName,project);
+                        list.add(tableDevice_0);
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }break;
+            case 1:
+                TableDevice tableDevice_1 = new TableDevice("无对应设备","","","","");
+                list.add(tableDevice_1);
+                break;
+            case 2:
+            default:
+                TableDevice tableDevice_2 = new TableDevice("未知错误","","","","");
+                list.add(tableDevice_2);
+        }
+        return list;
+    }
+    //获取相同项目的设备
+    public List<TableDevice> getDeviceProject(String projectName){
+        List<TableDevice> list = new ArrayList<TableDevice>();
+        switch (this.isDeviceCompany(projectName)){
+            case 0:
+                TableDevice tableDevice_0 =null;
+                String name,device,type,company;
+                sql = "select * from devices where device_project = '"+projectName+"'";
+                try {
+                    Statement statement = connection.createStatement();
+                    ResultSet resultSet = statement.executeQuery(sql);
+                    while (resultSet.next()){
+                        name = resultSet.getString("device_owner");
+                        device = resultSet.getString("device_name");
+                        type = resultSet.getString("device_type");
+                        company = resultSet.getString("device_company");
+                        tableDevice_0 = new TableDevice(name,device,type,company,projectName);
+                        list.add(tableDevice_0);
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }break;
+            case 1:
+                TableDevice tableDevice_1 = new TableDevice("无对应设备","","","","");
+                list.add(tableDevice_1);
+                break;
+            case 2:
+            default:
+                TableDevice tableDevice_2 = new TableDevice("未知错误","","","","");
+                list.add(tableDevice_2);
+        }
+        return list;
+    }
     //获取整个设备列表
     public List<TableDevice> getAllDevice(){
         List<TableDevice> list = new ArrayList<TableDevice>();
-        TableDevice tableDevice_0 =null;
-        String name,device,type,company,project;
-        sql = "select * from devices";
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
-            while (resultSet.next()){
-                name = resultSet.getString("device_owner");
-                device = resultSet.getString("device_name");
-                type = resultSet.getString("device_type");
-                company = resultSet.getString("device_company");
-                project = resultSet.getString("device_project");
-                tableDevice_0 = new TableDevice(name,device,type,company,project);
-                list.add(tableDevice_0);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        switch (this.isDeviceAll()){
+            case 0:
+                TableDevice tableDevice_0 =null;
+                String name,device,type,company,project;
+                sql = "select * from devices";
+                try {
+                    Statement statement = connection.createStatement();
+                    ResultSet resultSet = statement.executeQuery(sql);
+                    while (resultSet.next()){
+                        name = resultSet.getString("device_owner");
+                        device = resultSet.getString("device_name");
+                        type = resultSet.getString("device_type");
+                        company = resultSet.getString("device_company");
+                        project = resultSet.getString("device_project");
+                        tableDevice_0 = new TableDevice(name,device,type,company,project);
+                        list.add(tableDevice_0);
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }break;
+            case 1:
+                TableDevice tableDevice_1 = new TableDevice("当前无设备","","","","");
+                list.add(tableDevice_1);
+                break;
+            case 2:
+            default:
+                TableDevice tableDevice_2 = new TableDevice("未知错误","","","","");
+                list.add(tableDevice_2);
         }
         return list;
     }

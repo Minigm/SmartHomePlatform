@@ -12,7 +12,8 @@
         android:id="@+id/searchView_admin_device"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:queryHint="[搜索列] [内容](仅输入all列出所有)"/>
+        android:queryHint="[搜索列] [内容](仅输入all列出所有)"
+        android:layout_toLeftOf="@+id/buttonExit_admin_device"/>
     <!--标题栏-->
     <TextView
         android:id="@+id/textTitle_admin_device"
@@ -68,4 +69,24 @@
             android:layout_height="wrap_content"
             android:stretchColumns="0,1,2,3,4"/>
     </ScrollView>
+    <Button
+        android:id="@+id/buttonExit_admin_device"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:text="返回"
+        android:onClick="buttonExit_admin_deviceOcClick"/>
+    <TextView
+        android:id="@+id/textTitleCount_admin_device"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="筛选设备数："
+        android:layout_above="@+id/tableLayout_admin_device"
+        android:layout_marginLeft="10dp"/>
+    <TextView
+        android:id="@+id/textCount_admin_device"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/textTitleCount_admin_device"
+        android:layout_above="@+id/tableLayout_admin_device"/>
 </RelativeLayout>

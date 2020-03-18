@@ -3,13 +3,8 @@ package com.gm.smartHomePlatform.Administrator.Table;
 import android.content.Context;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-
-import com.gm.smartHomePlatform.R;
 
 import java.util.ArrayList;
 import java.util.List;

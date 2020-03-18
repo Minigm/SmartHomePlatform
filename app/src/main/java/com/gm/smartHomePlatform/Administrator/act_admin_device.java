@@ -23,6 +23,7 @@ import android.widget.SearchView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,7 @@ public class act_admin_device extends AppCompatActivity {
     //子线程处理标志
     private boolean CONNECTION_FLAG = false;
     //子线程处理消息
-    private final int UNKNOWN_SITUATION = 0,CHANGE_TABLE = 1;
+    private final int UNKNOWN_SITUATION = 0,CHANGE_TABLE = 1,WRONG_INPUT = 2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +60,8 @@ public class act_admin_device extends AppCompatActivity {
         CONNECTION_FLAG = true;
         SearchView searchView = (SearchView)findViewById(R.id.searchView_admin_device);
         searchView.setOnQueryTextListener(new myQueryTextListener());
+        TextView textView = (TextView)findViewById(R.id.textCount_admin_device);
+        textView.setText("0");
     }
 
     private class myQueryTextListener implements SearchView.OnQueryTextListener {
@@ -84,8 +87,11 @@ public class act_admin_device extends AppCompatActivity {
         }
     }
 
-
-
+    public void buttonExit_admin_deviceOcClick(View v) {
+        if (list != null)list.clear();
+        CONNECTION_FLAG = false;
+        finish();
+    }
 
     //网络处理子线程
     private class InternetThread extends Thread{
@@ -105,23 +111,31 @@ public class act_admin_device extends AppCompatActivity {
                             case "all":
                                 list.clear();
                                 list.addAll(deviceManager.getAllDevice());
-                                System.out.println("klklkllk");
-                                break;
+                                mHandler.sendEmptyMessage(CHANGE_TABLE);break;
                             case "拥有者":
                                 list.clear();
                                 list.addAll(deviceManager.getDeviceUser(main));
-                                break;
+                                mHandler.sendEmptyMessage(CHANGE_TABLE);break;
                             case "设备名":
                                 list.clear();
                                 list.addAll(deviceManager.getDeviceName(main));
-                                break;
-                            case "设备类型":break;
-                            case "所属公司":break;
-                            case "所属项目":break;
-                            default:break;
+                                mHandler.sendEmptyMessage(CHANGE_TABLE);break;
+                            case "设备类型":
+                                list.clear();
+                                list.addAll(deviceManager.getDeviceType(main));
+                                mHandler.sendEmptyMessage(CHANGE_TABLE);break;
+                            case "所属公司":
+                                list.clear();
+                                list.addAll(deviceManager.getDeviceCompany(main));
+                                mHandler.sendEmptyMessage(CHANGE_TABLE);break;
+                            case "所属项目":
+                                list.clear();
+                                list.addAll(deviceManager.getDeviceProject(main));
+                                mHandler.sendEmptyMessage(CHANGE_TABLE);break;
+                            default:
+                                mHandler.sendEmptyMessage(WRONG_INPUT);break;
                         }
-                        mHandler.sendEmptyMessage(CHANGE_TABLE);
-                    }
+                    }break;
                 }
             }
         }
@@ -130,6 +144,8 @@ public class act_admin_device extends AppCompatActivity {
     private Handler mHandler = new Handler(){
         public void handleMessage(Message msg){
             if (msg.what == CHANGE_TABLE){
+                TextView textView = (TextView)findViewById(R.id.textCount_admin_device);
+                textView.setText(Integer.toString(list.size()));
                 TableLayout tableLayout = (TableLayout)findViewById(R.id.tableLayout_in_admin_device);
                 tableLayout.removeAllViews();
                 for (int i = 0;i <list.size();i++){
@@ -138,6 +154,8 @@ public class act_admin_device extends AppCompatActivity {
                     tableLayout.addView(tableManager);
                     tableManager.clearAnimation();
                 }
+            }else if (msg.what == WRONG_INPUT){
+                Toast.makeText(getBaseContext(),"不正确的语句",Toast.LENGTH_LONG).show();
             }
         }
     };

@@ -95,16 +95,14 @@ public class act_add_user extends AppCompatActivity {
         public void handleMessage(Message msg){
             if (msg.what == SUCCESSFUL_ADD){
                 //注册成功消息处理
-                Toast to = Toast.makeText(getBaseContext(),"注册成功，返回登录",Toast.LENGTH_LONG);
-                to.show();finish();
+                Toast.makeText(getBaseContext(),"注册成功，返回登录",Toast.LENGTH_LONG).show();
+                finish();
             }else if (msg.what == USER_EXISTED){
                 //用户已存在消息处理
-                Toast to = Toast.makeText(getBaseContext(),"该用户已存在，请尝试找回密码",Toast.LENGTH_LONG);
-                to.show();
+                Toast.makeText(getBaseContext(),"该用户已存在，请尝试找回密码",Toast.LENGTH_LONG).show();
             }else if (msg.what == UNKNOWN_SITUATION){
                 //未知错误消息处理
-                Toast to = Toast.makeText(getBaseContext(),"未知错误，尝试重新注册",Toast.LENGTH_LONG);
-                to.show();
+                Toast.makeText(getBaseContext(),"未知错误，尝试重新注册",Toast.LENGTH_LONG).show();
             }
         }
     };

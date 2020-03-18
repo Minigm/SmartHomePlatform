@@ -141,8 +141,7 @@ public class act_forget_password extends AppCompatActivity {
             if (msg.what == RIGHT_CODE){
                 change();
             }else if (msg.what == WRONG_CODE){
-                Toast to = Toast.makeText(getBaseContext(),"管理码错误，联系管理员",Toast.LENGTH_LONG);
-                to.show();
+                Toast.makeText(getBaseContext(),"管理码错误，联系管理员",Toast.LENGTH_LONG).show();
             }else if (msg.what == NO_USER){
                 AlertDialog.Builder ad = new AlertDialog.Builder(act_forget_password.this);
                 ad.setTitle("用户不存在是否尝试注册？");
@@ -162,17 +161,14 @@ public class act_forget_password extends AppCompatActivity {
                 });
                 ad.show();
             }else if (msg.what == CHANGE_PASSWORD){
-                Toast to = Toast.makeText(getBaseContext(),"密码修改完毕",Toast.LENGTH_LONG);
-                to.show();
+                Toast.makeText(getBaseContext(),"密码修改完毕",Toast.LENGTH_LONG).show();
                 finish();
             }else if (msg.what == DIFFRENT_PASSWORD){
-                Toast to = Toast.makeText(getBaseContext(),"两次输入不一致",Toast.LENGTH_LONG);
-                to.show();
+                Toast.makeText(getBaseContext(),"两次输入不一致",Toast.LENGTH_LONG).show();
                 ((EditText)findViewById(R.id.editPassword_forget_password)).setText("");
                 ((EditText)findViewById(R.id.editPasswordAgain_forget_password)).setText("");
             }else if (msg.what == UNKNOWN_SITUATION){
-                Toast to = Toast.makeText(getBaseContext(),"未知错误，重新尝试",Toast.LENGTH_LONG);
-                to.show();
+                Toast.makeText(getBaseContext(),"未知错误，重新尝试",Toast.LENGTH_LONG).show();
             }
         }
     };

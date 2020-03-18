@@ -140,16 +140,13 @@ public class act_login extends AppCompatActivity {
         public void handleMessage(Message msg){
             if (msg.what == USER_SIGNED){
                 //一般用户登录消息处理
-                Toast to = Toast.makeText(getBaseContext(),"欢迎使用慧家平台",Toast.LENGTH_LONG);
-                to.show();
+                Toast.makeText(getBaseContext(),"欢迎使用慧家平台",Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(act_login.this, act_user_main.class);
                 startActivity(intent);
             }else if (msg.what == COMPANY_SIGNED){
-                Toast to = Toast.makeText(getBaseContext(),"欢迎企业用户",Toast.LENGTH_LONG);
-                to.show();
+                Toast.makeText(getBaseContext(),"欢迎企业用户",Toast.LENGTH_LONG).show();
             }else if (msg.what == ADMIN_SIGNED){
-                Toast to = Toast.makeText(getBaseContext(),"管理员登录快去维护",Toast.LENGTH_LONG);
-                to.show();
+                Toast.makeText(getBaseContext(),"管理员登录快去维护",Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(act_login.this, act_admin_main.class);
                 startActivity(intent);
             }else if (msg.what == WRONG_PASSWORD){
@@ -178,8 +175,7 @@ public class act_login extends AppCompatActivity {
                 ad.show();
             }else if (msg.what == UNKNOWN_SITUATION){
                 //未知状态消息处理
-                Toast to = Toast.makeText(getBaseContext(),"未知错误，请尝试重新操作",Toast.LENGTH_LONG);
-                to.show();
+                Toast.makeText(getBaseContext(),"未知错误，请尝试重新操作",Toast.LENGTH_LONG).show();
             }else if (msg.what == FORGET_PASSWORD){
                 //忘记密码消息处理,跳转至忘记密码活动
                 Intent intent = new Intent(act_login.this,act_forget_password.class);
