@@ -10,7 +10,7 @@
         android:id="@+id/relativeLayout_0_admin_company"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="invisible">
+        android:visibility="visible">
         <!--搜索框-->
         <SearchView
             android:id="@+id/searchView_admin_company"
@@ -233,7 +233,7 @@
         android:id="@+id/relativeLayout_2_admin_company"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible">
+        android:visibility="invisible">
         <TextView
             android:id="@+id/textTitle_2_admin_company"
             android:layout_width="match_parent"

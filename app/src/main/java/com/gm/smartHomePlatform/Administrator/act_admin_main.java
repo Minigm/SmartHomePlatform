@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 public class act_admin_main extends AppCompatActivity {
     //子线程处理消息
-    private final int UNKNOWN_SITUATION = 0,EXIT = 1,DEVICE_ADMIN = 2;
+    private final int UNKNOWN_SITUATION = 0,EXIT = 1,DEVICE_ADMIN = 2,COMPANY_ADMIN = 3,USER_ADMIN = 4;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,12 +28,11 @@ public class act_admin_main extends AppCompatActivity {
     }
     //用户管理按钮响应
     public void buttonUserAdmin_admin_mainOnClick(View v){
-        ;
+        mHandler.sendEmptyMessage(USER_ADMIN);
     }
     //企业管理按钮响应
     public void buttonCompanyAdmin_admin_mainOnClick(View v){
-        Intent intent = new Intent(act_admin_main.this,act_admin_company.class);
-        startActivity(intent);
+        mHandler.sendEmptyMessage(COMPANY_ADMIN);
     }
     //设备管理按钮响应
     public void buttonDeviceAdmin_admin_mainOnClick(View v){
@@ -53,6 +52,10 @@ public class act_admin_main extends AppCompatActivity {
                 startActivity(new Intent(act_admin_main.this,act_admin_device.class));
             }else if (msg.what == UNKNOWN_SITUATION){
                 Toast.makeText(getBaseContext(),"未知错误，请尝试重新操作",Toast.LENGTH_LONG).show();
+            }else if (msg.what == COMPANY_ADMIN){
+                startActivity(new Intent(act_admin_main.this,act_admin_company.class));
+            }else if (msg.what == USER_ADMIN){
+                startActivity(new Intent(act_admin_main.this,act_admin_user.class));
             }
         }
     };

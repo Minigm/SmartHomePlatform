@@ -62,13 +62,14 @@ public class act_admin_device extends AppCompatActivity {
         textView.setText("0");
     }
     //返回按钮响应
-    public void buttonExit_admin_companyOnClick(View view) {
+    public void buttonExit_admin_deviceOnClick(View view) {
         //清空设备列表
-        if (list != null)list.clear();
+        //if (list != null)list.clear();
         //停止子线程
         CONNECTION_FLAG = false;
         finish();
     }
+
     //搜索框响应
     private class myQueryTextListener implements SearchView.OnQueryTextListener {
         @Override
