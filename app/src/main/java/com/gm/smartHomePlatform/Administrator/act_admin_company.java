@@ -11,6 +11,7 @@ import com.gm.smartHomePlatform.SQLSeverManeger.CompanyManager;
 import com.gm.smartHomePlatform.SQLSeverManeger.DeviceManager;
 
 import android.content.SharedPreferences;
+import android.opengl.ETC1;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -35,7 +36,11 @@ public class act_admin_company extends AppCompatActivity {
     //子线程处理标志
     private boolean CONNECTION_FLAG = false;
     //子线程处理消息
-    private final int UNKNOWN_SITUATION = 0,CHANGE_TABLE = 1,WRONG_INPUT = 2,ADD_COMPANY = 3,BACK_MAIN = 4;
+    private final int UNKNOWN_SITUATION = 0,CHANGE_TABLE = 1,WRONG_INPUT = 2,ADD_COMPANY = 3,
+            ADD_BACK_MAIN = 4,EMPTY_COMPANY_NAME = 5,EMPTY_COMPANY_PROJECT = 6,EMPTY_COMPANY_DEVICE = 7,
+            EXIST_ACTS = 8,UPDATE_SUCCESS = 9,ADD_SUCCESS = 10,DELETE_COMPANY = 11,DELETE_BACK_MAIN = 12,
+            NO_COMPANY_NAME = 13,NO_COMPANY_PROJECT = 14,NO_COMPANY_DEVICE = 15,NO_DEVICE_ACT = 16,
+            DELETE_SUSCCESS = 17;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +63,8 @@ public class act_admin_company extends AppCompatActivity {
         relativeLayout.setVisibility(View.VISIBLE);
         relativeLayout = (RelativeLayout)findViewById(R.id.relativeLayout_1_admin_company);
         relativeLayout.setVisibility(View.INVISIBLE);
+        relativeLayout = (RelativeLayout)findViewById(R.id.relativeLayout_2_admin_company);
+        relativeLayout.setVisibility(View.INVISIBLE);
     }
     @Override
     protected void onStart() {
@@ -69,10 +76,11 @@ public class act_admin_company extends AppCompatActivity {
         TextView textView = (TextView)findViewById(R.id.textCount_admin_company);
         textView.setText("0");
     }
+    //添加企业按钮响应
     public void buttonAddCompany_admin_companyOnClick(View view) {
         mHandler.sendEmptyMessage(ADD_COMPANY);
     }
-
+    //确认添加按钮响应
     public void buttonConfirmAdd_admin_companyOnClick(View view) {
         EditText editText = (EditText)findViewById(R.id.editCompanyName_admin_company);
         String name = editText.getText().toString();
@@ -82,14 +90,33 @@ public class act_admin_company extends AppCompatActivity {
         String device = editText.getText().toString();
         editText = (EditText)findViewById(R.id.editCompanyActs_admin_company);
         String acts = editText.getText().toString();
-        TableCompany tableCompany = new TableCompany(name,project,device,acts);
-        list.add(tableCompany);
+        list.add(new TableCompany(name,project,device,acts));
         CONNECTION_STATE =2;
     }
-
+    //添加企业退出按钮响应
     public void buttonExitAdd_admin_companyOnClick(View view) {
-
-        mHandler.sendEmptyMessage(BACK_MAIN);
+        mHandler.sendEmptyMessage(ADD_BACK_MAIN);
+    }
+    //删除企业按钮响应
+    public void buttonDeleteCompany_admin_companyOnClick(View view) {
+        mHandler.sendEmptyMessage(DELETE_COMPANY);
+    }
+    //确认删除按钮响应
+    public void buttonConfirmDelete_admin_companyOnClick(View view) {
+        EditText editText = (EditText)findViewById(R.id.editCompanyName_1_admin_company);
+        String name = editText.getText().toString();
+        editText = (EditText)findViewById(R.id.editCompanyProject_1_admin_company);
+        String project = editText.getText().toString();
+        editText = (EditText)findViewById(R.id.editCompanyDevice_1_admin_company);
+        String device = editText.getText().toString();
+        editText = (EditText)findViewById(R.id.editCompanyActs_1_admin_company);
+        String acts = editText.getText().toString();
+        list.add(new TableCompany(name,project,device,acts));
+        CONNECTION_STATE = 3;
+    }
+    //删除企业退出按钮响应
+    public void buttonExitDelete_admin_companyOnClick(View view) {
+        mHandler.sendEmptyMessage(DELETE_BACK_MAIN);
     }
 
     //搜索框响应
@@ -123,7 +150,6 @@ public class act_admin_company extends AppCompatActivity {
         CONNECTION_FLAG = false;
         finish();
     }
-
     //网络处理子线程
     private class InternetThread extends Thread{
         @Override
@@ -163,7 +189,42 @@ public class act_admin_company extends AppCompatActivity {
                                 mHandler.sendEmptyMessage(WRONG_INPUT);break;
                         }break;
                     case 2:
-
+                        CONNECTION_STATE = 0;
+                        switch (companyManager.addCompany(list.get(list.size()-1))){
+                            case 1:
+                                mHandler.sendEmptyMessage(EMPTY_COMPANY_NAME);break;
+                            case 2:
+                                mHandler.sendEmptyMessage(EMPTY_COMPANY_PROJECT);break;
+                            case 3:
+                                mHandler.sendEmptyMessage(EMPTY_COMPANY_DEVICE);break;
+                            case 4:
+                                mHandler.sendEmptyMessage(EXIST_ACTS);break;
+                            case 5:
+                                mHandler.sendEmptyMessage(UPDATE_SUCCESS);break;
+                            case 6:
+                                mHandler.sendEmptyMessage(ADD_SUCCESS);break;
+                            default:
+                                mHandler.sendEmptyMessage(UNKNOWN_SITUATION);break;
+                        }
+                        break;
+                    case 3:
+                        CONNECTION_STATE = 0;
+                        switch (companyManager.deleteCompany(list.get(list.size()-1))){
+                            case 1:
+                                mHandler.sendEmptyMessage(NO_COMPANY_NAME);break;
+                            case 2:
+                                mHandler.sendEmptyMessage(NO_COMPANY_PROJECT);break;
+                            case 3:
+                                mHandler.sendEmptyMessage(NO_COMPANY_DEVICE);break;
+                            case 4:
+                                mHandler.sendEmptyMessage(NO_DEVICE_ACT);break;
+                            case 5:
+                                mHandler.sendEmptyMessage(DELETE_SUSCCESS);break;
+                            default:
+                                mHandler.sendEmptyMessage(UNKNOWN_SITUATION);break;
+                        }
+                    default:
+                        CONNECTION_STATE = 0;break;
                 }
             }
         }
@@ -183,19 +244,87 @@ public class act_admin_company extends AppCompatActivity {
                     tableLayout.addView(tableManager);
                     tableManager.clearAnimation();
                 }
-            }else if (msg.what == WRONG_INPUT){
+            }
+            else if (msg.what == WRONG_INPUT){
                 //提示指令错误
                 Toast.makeText(getBaseContext(),"不正确的语句",Toast.LENGTH_LONG).show();
-            }else if (msg.what == ADD_COMPANY){
+            }
+            else if (msg.what == ADD_COMPANY){
                 RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.relativeLayout_0_admin_company);
                 relativeLayout.setVisibility(View.INVISIBLE);
                 relativeLayout = (RelativeLayout)findViewById(R.id.relativeLayout_1_admin_company);
                 relativeLayout.setVisibility(View.VISIBLE);
-            }else if (msg.what == BACK_MAIN){
+            }
+            else if (msg.what == ADD_BACK_MAIN){
                 RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.relativeLayout_0_admin_company);
                 relativeLayout.setVisibility(View.VISIBLE);
                 relativeLayout = (RelativeLayout)findViewById(R.id.relativeLayout_1_admin_company);
                 relativeLayout.setVisibility(View.INVISIBLE);
+                EditText editText = (EditText)findViewById(R.id.editCompanyName_admin_company);
+                editText.setText("");
+                editText = (EditText)findViewById(R.id.editCompanyProject_admin_company);
+                editText.setText("");
+                editText = (EditText)findViewById(R.id.editCompanyDevice_admin_company);
+                editText.setText("");
+                editText = (EditText)findViewById(R.id.editCompanyActs_admin_company);
+                editText.setText("");
+
+            }
+            else if (msg.what == DELETE_BACK_MAIN){
+                RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.relativeLayout_0_admin_company);
+                relativeLayout.setVisibility(View.VISIBLE);
+                relativeLayout = (RelativeLayout)findViewById(R.id.relativeLayout_2_admin_company);
+                relativeLayout.setVisibility(View.INVISIBLE);
+                EditText editText = (EditText)findViewById(R.id.editCompanyName_1_admin_company);
+                editText.setText("");
+                editText = (EditText)findViewById(R.id.editCompanyProject_1_admin_company);
+                editText.setText("");
+                editText = (EditText)findViewById(R.id.editCompanyDevice_1_admin_company);
+                editText.setText("");
+                editText = (EditText)findViewById(R.id.editCompanyActs_1_admin_company);
+                editText.setText("");
+            }
+            else if (msg.what == EMPTY_COMPANY_NAME){
+                Toast.makeText(getBaseContext(),"企业名不能为空！",Toast.LENGTH_LONG).show();
+            }
+            else if (msg.what == EMPTY_COMPANY_PROJECT){
+                Toast.makeText(getBaseContext(),"工程名不能为空！",Toast.LENGTH_LONG).show();
+            }
+            else if (msg.what == EMPTY_COMPANY_DEVICE){
+                Toast.makeText(getBaseContext(),"设备类型不能为空！",Toast.LENGTH_LONG).show();
+            }
+            else if (msg.what == EXIST_ACTS){
+                Toast.makeText(getBaseContext(),"已经存在相同数据，未添加",Toast.LENGTH_LONG).show();
+            }
+            else if (msg.what == UPDATE_SUCCESS){
+                Toast.makeText(getBaseContext(),"已更新属性列表",Toast.LENGTH_LONG).show();
+            }
+            else if (msg.what == ADD_SUCCESS){
+                Toast.makeText(getBaseContext(),"添加成功！",Toast.LENGTH_LONG).show();
+            }
+            else if (msg.what == UNKNOWN_SITUATION){
+                Toast.makeText(getBaseContext(),"未知错误！",Toast.LENGTH_LONG).show();
+            }
+            else if (msg.what == DELETE_COMPANY){
+                RelativeLayout relativeLayout =(RelativeLayout)findViewById(R.id.relativeLayout_2_admin_company);
+                relativeLayout.setVisibility(View.VISIBLE);
+                relativeLayout = (RelativeLayout)findViewById(R.id.relativeLayout_0_admin_company);
+                relativeLayout.setVisibility(View.INVISIBLE);
+            }
+            else if (msg.what == NO_COMPANY_NAME){
+                Toast.makeText(getBaseContext(),"没有该企业！",Toast.LENGTH_LONG).show();
+            }
+            else if (msg.what == NO_COMPANY_PROJECT){
+                Toast.makeText(getBaseContext(),"没有该工程！",Toast.LENGTH_LONG).show();
+            }
+            else if (msg.what == NO_COMPANY_DEVICE){
+                Toast.makeText(getBaseContext(),"没有该设备类型！",Toast.LENGTH_LONG).show();
+            }
+            else if (msg.what == NO_DEVICE_ACT){
+                Toast.makeText(getBaseContext(),"没有该设备属性！",Toast.LENGTH_LONG).show();
+            }
+            else if (msg.what == DELETE_SUSCCESS){
+                Toast.makeText(getBaseContext(),"删除成功！",Toast.LENGTH_LONG).show();
             }
         }
     };

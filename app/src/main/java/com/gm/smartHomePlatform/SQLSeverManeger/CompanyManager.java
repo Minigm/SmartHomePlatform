@@ -5,6 +5,7 @@ import com.gm.smartHomePlatform.Administrator.Table.TableDevice;
 import com.gm.smartHomePlatform.Administrator.Table.TableManager;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -88,6 +89,23 @@ public class CompanyManager {
             e.printStackTrace();
         }
         return 2;
+    }
+    //用于获取对应设备的属性列表。
+    public String getActs(String companyName,String projectName,String deviceName){
+        String acts = null;
+        if (isCompanyName(companyName)+isCompanyProject(projectName)+isCompanyDevice(deviceName) == 0){
+            sql = "select device_acts from companies where company_name = '"+companyName+"' and company_project = '"+projectName+"' and company_device = '"+deviceName+"'";
+            try {
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(sql);
+                resultSet.next();
+                acts = resultSet.getString("device_acts");
+                this.close(statement,resultSet);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return acts;
     }
     //用于判断企业列表是否有内容。0，有；1，没有；2，未知错误
     public int isCompanyAll(){
@@ -237,5 +255,117 @@ public class CompanyManager {
                 list.add(tableCompany_2);
         }
         return list;
+    }
+    //添加企业。0,未知错误；1，企业名为空；2，项目名为空；3，设备类型为空；4，已存在的记录；5，更新成功；6，添加成功。
+    public int addCompany(TableCompany tableCompany){
+        String name = tableCompany.getCompany_name();
+        String project = tableCompany.getCompany_project();
+        String device = tableCompany.getCompany_device();
+        String acts = tableCompany.getDevice_acts();
+        if (name.equals("")){
+            return 1;
+        }else {
+            if (project.equals("")){
+                return 2;
+            }else {
+                if (device.equals("")){
+                    return 3;
+                }else {
+                    if (this.isCompanyName(name) == 0){
+                        if (this.isCompanyProject(project) == 0){
+                            if (this.isCompanyDevice(device) == 0){
+                                if (acts.equals(this.getActs(name,project,device))){
+                                    return 4;
+                                }else {
+                                    sql = "update companies set device_acts = ? where company_name = ? and company_project = ? and company_device = ?";
+                                    try {
+                                        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                                        preparedStatement.setString(1,acts);
+                                        preparedStatement.setString(2,name);
+                                        preparedStatement.setString(3,project);
+                                        preparedStatement.setString(4,device);
+                                        preparedStatement.executeUpdate();
+                                        return 5;
+                                    } catch (SQLException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    sql = "insert into companies (company_name,company_project,company_device,device_acts) values(?,?,?,?)";
+                    try {
+                        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                        preparedStatement.setString(1,name);
+                        preparedStatement.setString(2,project);
+                        preparedStatement.setString(3,device);
+                        preparedStatement.setString(4,acts);
+                        preparedStatement.executeUpdate();
+                        return 6;
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+    //删除企业。0未知错误；1，企业不存在；2，项目不存在；3，设备类型不存在；4，设备属性不存在；5，删除成功。
+    public int deleteCompany(TableCompany tableCompany){
+        String name = tableCompany.getCompany_name();
+        String project = tableCompany.getCompany_project();
+        String device = tableCompany.getCompany_device();
+        String acts = tableCompany.getDevice_acts();
+        if (this.isCompanyName(name) == 0){
+            if (project.equals("")){
+                sql = "delete from companies where company_name = '"+name+"'";
+                try {
+                    Statement statement = connection.createStatement();
+                    statement.execute(sql);
+                    return 5;
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }else {
+                if (this.isCompanyProject(project) == 0){
+                    if (device.equals("")){
+                        sql = "delete from companies where company_name = '"+name+"' and company_project = '"+project+"'";
+                        try {
+                            Statement statement = connection.createStatement();
+                            statement.execute(sql);
+                            return 5;
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }else {
+                        if (this.isCompanyDevice(device) == 0){
+                            String[] has_acts = this.getActs(name,project,device).split(";");
+                            String[] now_acts = acts.split(";");
+                            List<String> list = new ArrayList<String>();
+                            for (int i = 0;i < has_acts.length;i++){
+                                list.add(now_acts[i]);
+                            }
+                            for (int j = 0;j < now_acts.length;j++){
+                                if (list.get(j).equals(now_acts[j])){
+                                    list.remove(j);
+                                }
+                            }
+                            for (int i = 0;i < list.size();i++){
+                                acts += list.get(i);
+                            }
+                            TableCompany tableCompany1 = new TableCompany(name,project,device,acts);
+                            return this.addCompany(tableCompany1);
+                        }else {
+                            return 3;
+                        }
+                    }
+                }else {
+                    return 2;
+                }
+            }
+        }else {
+            return 1;
+        }
+        return 0;
     }
 }
