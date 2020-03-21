@@ -4,14 +4,11 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.gm.smartHomePlatform.Administrator.Table.TableCompany;
-import com.gm.smartHomePlatform.Administrator.Table.TableDevice;
 import com.gm.smartHomePlatform.Administrator.Table.TableManager;
 import com.gm.smartHomePlatform.R;
 import com.gm.smartHomePlatform.SQLSeverManeger.CompanyManager;
-import com.gm.smartHomePlatform.SQLSeverManeger.DeviceManager;
 
 import android.content.SharedPreferences;
-import android.opengl.ETC1;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -118,7 +115,6 @@ public class act_admin_company extends AppCompatActivity {
     public void buttonExitDelete_admin_companyOnClick(View view) {
         mHandler.sendEmptyMessage(DELETE_BACK_MAIN);
     }
-
     //搜索框响应
     private class myQueryTextListener implements SearchView.OnQueryTextListener {
         @Override

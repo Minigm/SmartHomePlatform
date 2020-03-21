@@ -9,7 +9,7 @@
         android:id="@+id/relativeLayout_0_admin_user"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible">
+        android:visibility="invisible">
         <!--搜索框-->
         <SearchView
             android:id="@+id/searchView_admin_user"
@@ -94,18 +94,176 @@
                 <TextView
                     android:visibility="invisible"/>
                 <Button
-                    android:id="@+id/buttonAddCompany_admin_user"
+                    android:id="@+id/buttonAddUser_admin_user"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="添加"
-                    android:onClick="buttonAddCompany_admin_userOnClick"/>
+                    android:onClick="buttonAddUser_admin_userOnClick"/>
                 <Button
-                    android:id="@+id/buttonDeleteCompany_admin_user"
+                    android:id="@+id/buttonDeleteUser_admin_user"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="删除"
-                    android:onClick="buttonDeleteCompany_admin_userOnClick"/>
+                    android:onClick="buttonDeleteUser_admin_userOnClick"/>
             </TableRow>
         </TableLayout>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/relativeLayout_1_admin_user"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
+        <TextView
+            android:id="@+id/textTitle_1_admin_user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="添加用户"
+            android:textSize="30sp"
+            android:gravity="center"
+            android:layout_marginTop="20dp"/>
+        <TextView
+            android:id="@+id/textGuidHorizon1_admin_user"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:visibility="invisible"
+            android:layout_below="@+id/textTitle_1_admin_user"/>
+        <TextView
+            android:id="@+id/textUserName_admin_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="用户名："
+            android:textSize="20sp"
+            android:layout_below="@+id/textGuidHorizon1_admin_user"
+            android:layout_marginLeft="40dp"/>
+        <EditText
+            android:id="@+id/editUserName_admin_user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/textUserName_admin_user"
+            android:layout_alignBaseline="@+id/textUserName_admin_user"
+            android:textSize="18sp"
+            android:hint="请输入用户名"
+            android:layout_marginRight="40dp"/>
+        <TextView
+            android:id="@+id/textUserPassword_admin_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="密码："
+            android:textSize="20sp"
+            android:layout_below="@+id/textUserName_admin_user"
+            android:layout_marginTop="30dp"
+            android:layout_alignLeft="@+id/textUserName_admin_user"/>
+        <EditText
+            android:id="@+id/editUserPassword_admin_user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/textUserPassword_admin_user"
+            android:layout_alignBaseline="@+id/textUserPassword_admin_user"
+            android:textSize="18sp"
+            android:hint="请输入密码"
+            android:layout_alignRight="@+id/editUserName_admin_user"/>
+        <TextView
+            android:id="@+id/textUserPower_admin_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="用户类型："
+            android:textSize="20sp"
+            android:layout_below="@+id/textUserPassword_admin_user"
+            android:layout_marginTop="30dp"
+            android:layout_alignLeft="@+id/textUserName_admin_user"/>
+        <EditText
+            android:id="@+id/editUserPower_admin_user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/textUserPower_admin_user"
+            android:layout_alignBaseline="@+id/textUserPower_admin_user"
+            android:textSize="18sp"
+            android:hint="0 普通用户；1 企业用户；2 管理员账户；3 管理员口令默认0"
+            android:layout_alignRight="@+id/editUserName_admin_user"/>
+        <TextView
+            android:id="@+id/textGuidVertical1_admin_user"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:visibility="invisible"/>
+        <Button
+            android:id="@+id/buttonConfirmAdd_admin_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/textGuidVertical1_admin_user"
+            android:layout_below="@+id/editUserPower_admin_user"
+            android:layout_marginTop="10dp"
+            android:text="确认添加"
+            android:onClick="buttonConfirmAdd_admin_userOnClick"/>
+        <Button
+            android:id="@+id/buttonExitAdd_admin_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/textGuidVertical1_admin_user"
+            android:layout_below="@+id/editUserPower_admin_user"
+            android:layout_marginTop="10dp"
+            android:text="退出"
+            android:onClick="buttonExitAdd_admin_userOnClick"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/relativeLayout_2_admin_user"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible">
+        <TextView
+            android:id="@+id/textTitle_2_admin_user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="删除用户"
+            android:textSize="30sp"
+            android:gravity="center"
+            android:layout_marginTop="20dp"/>
+        <TextView
+            android:id="@+id/textGuidHorizon2_admin_user"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:visibility="invisible"
+            android:layout_below="@+id/textTitle_2_admin_user"/>
+        <TextView
+            android:id="@+id/textUserName_1_admin_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="用户名:"
+            android:textSize="20sp"
+            android:layout_below="@+id/textGuidHorizon2_admin_user"
+            android:layout_marginLeft="40dp"/>
+        <EditText
+            android:id="@+id/editUserName_1_admin_user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/textUserName_1_admin_user"
+            android:layout_alignBaseline="@+id/textUserName_1_admin_user"
+            android:textSize="18sp"
+            android:hint="请输入用户名"
+            android:layout_marginRight="40dp"/>
+        <TextView
+            android:id="@+id/textGuidVertical2_admin_user"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:visibility="invisible"/>
+        <Button
+            android:id="@+id/buttonConfirmDelete_admin_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/textGuidVertical2_admin_user"
+            android:layout_below="@+id/editUserName_1_admin_user"
+            android:layout_marginTop="10dp"
+            android:text="确认删除"
+            android:onClick="buttonConfirmDelete_admin_userOnClick"/>
+        <Button
+            android:id="@+id/buttonExitDelete_admin_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/textGuidVertical2_admin_user"
+            android:layout_below="@+id/editUserName_1_admin_user"
+            android:layout_marginTop="10dp"
+            android:text="退出"
+            android:onClick="buttonExitDelete_admin_userOnClick"/>
     </RelativeLayout>
 </RelativeLayout>

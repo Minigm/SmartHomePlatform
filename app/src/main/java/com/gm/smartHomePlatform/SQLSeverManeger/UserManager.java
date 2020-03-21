@@ -1,10 +1,14 @@
 package com.gm.smartHomePlatform.SQLSeverManeger;
 
+import com.gm.smartHomePlatform.Administrator.Table.TableUser;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserManager {
     //通过构造函数创建UserManager实例，获得connect值
@@ -37,6 +41,27 @@ public class UserManager {
     //判断users表中是否有对应用户。0，有；1，没有；2，未知错误。
     public int isUser(String username){
         sql = "select count(*) from users where user_name = '"+username+"'";
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            //将结果移动到第一个结果
+            resultSet.next();
+            if (resultSet.getInt(1) == 0){
+                //如果表中没有该用户，以1状态返回
+                this.close(statement,resultSet);return 1;
+            }else {
+                //如果存在则以0状态返回
+                this.close(statement,resultSet);return 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        //如果发生意外运行至此，以2状态返回
+        return 2;
+    }
+    //判断users表中是否有对应权力的用户。0，有；1，没有；2，未知错误。
+    public int isPower(String power){
+        sql = "select count(*) from users where user_power = '"+power+"'";
         try {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
@@ -138,30 +163,60 @@ public class UserManager {
         //若出现意外运行至此，以5状态返回
         return 5;
     }
-    //用户注册。0,注册成功；1，用户已存在；2，未知错误。
+    //判断用户列表中是否有元素。0，有；1，没有；2，未知错误。
+    public int isUserAll(){
+        sql = "select count(*) from users";
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            resultSet.next();
+            if (resultSet.getInt(1) == 0){
+                this.close(statement,resultSet);return 1;
+            }else {
+                this.close(statement,resultSet);return 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 2;
+    }
+    //用户注册。0,注册成功；1，用户已存在；2，用户名为空；3，密码为空；4，未知错误
     public int addUser(String username, String password){
-        switch (this.isUser(username)){
-            case 0:
-                //0状态表示用户已经存在，以1状态返回
-                return 1;
-            case 1:
-                //1状态表示不存在用户，执行注册流程，以0状态返回
-                sql = "insert into users (user_name,user_password,user_power) values(?,?,?)";
-                try {
-                    PreparedStatement preparedStatement = connection.prepareStatement(sql);
-                    preparedStatement.setString(1,username);
-                    preparedStatement.setString(2,password);
-                    preparedStatement.setString(3,"0");
-                    preparedStatement.executeUpdate();
-                } catch (SQLException e) {
-                    e.printStackTrace();
+        return addUser(username, password,"0");
+    }
+    public int addUser(String username, String password,String power){
+        if (username.equals("")){
+            return 2;
+        }else {
+            if (password.equals("")){
+                return 3;
+            }else {
+                switch (this.isUser(username)){
+                    case 0:
+                        //0状态表示用户已经存在，以1状态返回
+                        return 1;
+                    case 1:
+                        //1状态表示不存在用户，执行注册流程，以0状态返回
+                        sql = "insert into users (user_name,user_password,user_power) values(?,?,?)";
+                        try {
+                            if (power.equals(""))power = "0" ;
+                            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                            preparedStatement.setString(1,username);
+                            preparedStatement.setString(2,password);
+                            preparedStatement.setString(3,power);
+                            preparedStatement.executeUpdate();
+                            DeviceManager deviceManager = null;
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                        return 0;
+                    default:
+                        break;
                 }
-                return 0;
-            default:
-                break;
+            }
         }
         //若发生意外运行至此，以2状态返回
-        return 2;
+        return 4;
     }
     //管理员口令获取。正确口令返回true，错误返会false。
     public boolean isCode(String code){
@@ -191,12 +246,14 @@ public class UserManager {
             e.printStackTrace();
         }
     }
-    //删除用户
+    //删除用户。0，删除成功；1，没有该用户。
     public int deleteUser(String username){
-        if (this.isUser(username)==1){
+        if (this.isUser(username)==0){
             sql = "delete from users where user_name = '"+username+"'";
             try {
                 connection.createStatement().execute(sql);
+                DeviceManager deviceManager = new DeviceManager();
+                deviceManager.deleteDevice(username,"");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -204,5 +261,101 @@ public class UserManager {
         }else {
             return 1;
         }
+    }
+    //获取某权力的用户
+    public List<TableUser> getUserPower(String userPower){
+        List<TableUser> tableUser = new ArrayList<TableUser>();
+        switch (this.isPower(userPower)){
+            case 0:
+                TableUser tableUser_0 = null;
+                String name,password,power;
+                sql = "select * from users where user_power = '"+userPower+"'";
+                try {
+                    Statement statement = connection.createStatement();
+                    ResultSet resultSet = statement.executeQuery(sql);
+                    while (resultSet.next()){
+                        name = resultSet.getString("user_name");
+                        password = resultSet.getString("user_password");
+                        power = resultSet.getString("user_power");
+                        tableUser_0 = new TableUser(name,password,power);
+                        tableUser.add(tableUser_0);
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }break;
+            case 1:
+                TableUser tableUser_1 = new TableUser("无对应用户","","");
+                tableUser.add(tableUser_1);
+                break;
+            case 2:
+            default:
+                TableUser tableUser_2 = new TableUser("未知错误","","");
+                tableUser.add(tableUser_2);
+        }
+        return tableUser;
+    }
+    //获取某用户
+    public List<TableUser> getUserName(String userName){
+        List<TableUser> tableUser = new ArrayList<TableUser>();
+        switch (this.isUser(userName)){
+            case 0:
+                TableUser tableUser_0 = null;
+                String name,password,power;
+                sql = "select * from users where user_name = '"+userName+"'";
+                try {
+                    Statement statement = connection.createStatement();
+                    ResultSet resultSet = statement.executeQuery(sql);
+                    while (resultSet.next()){
+                        name = resultSet.getString("user_name");
+                        password = resultSet.getString("user_password");
+                        power = resultSet.getString("user_power");
+                        tableUser_0 = new TableUser(name,password,power);
+                        tableUser.add(tableUser_0);
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }break;
+            case 1:
+                TableUser tableUser_1 = new TableUser("无对应用户","","");
+                tableUser.add(tableUser_1);
+                break;
+            case 2:
+            default:
+                TableUser tableUser_2 = new TableUser("未知错误","","");
+                tableUser.add(tableUser_2);
+        }
+        return tableUser;
+    }
+    //获取所用用户
+    public List<TableUser> getAllUser(){
+        List<TableUser> list = new ArrayList<TableUser>();
+        switch (this.isUserAll()){
+            case 0:
+                TableUser tableUser_0 = null;
+                String name,password,power;
+                sql = "select * from users";
+                try {
+                    Statement statement = connection.createStatement();
+                    ResultSet resultSet = statement.executeQuery(sql);
+                    while (resultSet.next()){
+                        name = resultSet.getString("user_name");
+                        password = resultSet.getString("user_password");
+                        power = resultSet.getString("user_power");
+                        tableUser_0 = new TableUser(name,password,power);
+                        list.add(tableUser_0);
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }break;
+            case 1:
+                TableUser tableUser_1 = new TableUser("无对应用户","","");
+                list.add(tableUser_1);
+                break;
+            case 2:
+            default:
+                TableUser tableUser_2 = new TableUser("未知错误","","");
+                list.add(tableUser_2);
+        }
+        return list;
     }
 }

@@ -339,5 +339,34 @@ public class DeviceManager {
         }
         return list;
     }
+    //删除设备。0用户名为空，1不存在设备，2用户设备删除成功，3设备删除成功，4未知错误
+    public int deleteDevice(String owner,String deviceName){
+        if (owner.equals("")){
+            return 0;
+        }else {
+            if (deviceName.equals("")){
+                sql = "delete from devices where device_owner = '"+owner+"'";
+                try {
+                    connection.createStatement().execute(sql);
+                    return 2;
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }else{
+                if (this.isDeviceName(deviceName) == 0){
+                    sql = "delete from devices where device_owner = '"+owner+"' and where device_name = '"+deviceName+"'";
+                    try {
+                        connection.createStatement().execute(sql);
+                        return 3;
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }else {
+                    return 1;
+                }
+            }
+        }
+        return 4;
+    }
 }
 
