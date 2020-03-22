@@ -36,27 +36,32 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="拥有者"/>
+                android:text="拥有者"
+                android:textSize="20sp"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="设备名"/>
+                android:text="设备名"
+                android:textSize="20sp"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="设备类型"/>
+                android:text="设备类型"
+                android:textSize="20sp"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="所属公司"/>
+                android:text="所属公司"
+                android:textSize="20sp"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="所属项目"/>
+                android:text="所属项目"
+                android:textSize="20sp"/>
         </TableRow>
     </TableLayout>
     <ScrollView

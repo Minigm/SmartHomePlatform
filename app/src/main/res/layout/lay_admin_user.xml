@@ -40,17 +40,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="用户名"/>
+                    android:text="用户名"
+                    android:textSize="20sp"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="密码"/>
+                    android:text="密码"
+                    android:textSize="20sp"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="用户类型"/>
+                    android:text="用户类型"
+                    android:textSize="20sp"/>
             </TableRow>
         </TableLayout>
         <ScrollView

@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.gm.smartHomePlatform.Administrator.act_admin_main;
+import com.gm.smartHomePlatform.Company.act_company_main;
 import com.gm.smartHomePlatform.Main.act_user_main;
 import com.gm.smartHomePlatform.R;
 import com.gm.smartHomePlatform.SQLSeverManeger.UserManager;
@@ -141,10 +142,10 @@ public class act_login extends AppCompatActivity {
             if (msg.what == USER_SIGNED){
                 //一般用户登录消息处理
                 Toast.makeText(getBaseContext(),"欢迎使用慧家平台",Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(act_login.this, act_user_main.class);
-                startActivity(intent);
+                startActivity(new Intent(act_login.this, act_user_main.class));
             }else if (msg.what == COMPANY_SIGNED){
                 Toast.makeText(getBaseContext(),"欢迎企业用户",Toast.LENGTH_LONG).show();
+                startActivity(new Intent(act_login.this, act_company_main.class));
             }else if (msg.what == ADMIN_SIGNED){
                 Toast.makeText(getBaseContext(),"管理员登录快去维护",Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(act_login.this, act_admin_main.class);

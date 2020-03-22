@@ -28,12 +28,20 @@ public class TableCompany {
         return device_acts;
     }
     //信息打包方法，用于在表中显示
-    public String[] getStrings(){
-        String[] strings = new String[4];
-        strings[0]=company_name;
-        strings[1]=company_project;
-        strings[2]=company_device;
-        strings[3]=device_acts;
-        return strings;
+    public String[] getStrings(int w){
+        if (w == 0){
+            String[] strings = new String[4];
+            strings[0]=company_name;
+            strings[1]=company_project;
+            strings[2]=company_device;
+            strings[3]=device_acts;
+            return strings;
+        }else {
+            String[] strings = new String[3];
+            strings[0]=company_project;
+            strings[1]=company_device;
+            strings[2]=device_acts;
+            return strings;
+        }
     }
 }

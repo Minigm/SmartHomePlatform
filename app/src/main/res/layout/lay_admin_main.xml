@@ -9,7 +9,7 @@
     <TextView
         android:id="@+id/textGuidVertical1_admin_main"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="300dp"
         android:layout_centerInParent="true"
         android:visibility="invisible"/>
     <!--标题提示-->

@@ -236,7 +236,7 @@ public class act_admin_company extends AppCompatActivity {
                 tableLayout.removeAllViews();
                 for (int i = 0;i <list.size();i++){
                     TableManager tableManager = new TableManager(act_admin_company.this);
-                    tableManager.getTableRow(list.get(i).getStrings());
+                    tableManager.getTableRow(list.get(i).getStrings(0));
                     tableLayout.addView(tableManager);
                     tableManager.clearAnimation();
                 }
