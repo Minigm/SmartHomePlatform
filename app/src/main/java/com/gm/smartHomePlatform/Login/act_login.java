@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import com.gm.smartHomePlatform.Administrator.act_admin_main;
 import com.gm.smartHomePlatform.Company.act_company_main;
-import com.gm.smartHomePlatform.Main.act_user_main;
+import com.gm.smartHomePlatform.User.act_user_main;
 import com.gm.smartHomePlatform.R;
 import com.gm.smartHomePlatform.SQLSeverManeger.UserManager;
 

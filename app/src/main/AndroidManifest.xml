@@ -23,7 +23,7 @@
         <activity
             android:name=".Administrator.act_admin_main"
             android:screenOrientation="portrait" />
-        <activity android:name=".Main.act_user_main" />
+        <activity android:name=".User.act_user_main" />
         <activity
             android:name=".Login.act_forget_password"
             android:screenOrientation="portrait" />
