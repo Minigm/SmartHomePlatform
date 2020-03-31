@@ -16,8 +16,8 @@
             android:layout_height="wrap_content"
             android:text="欢迎"
             android:textSize="20sp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"/>
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"/>
         <Button
             android:id="@+id/buttonAddDevice_user_main"
             android:layout_width="wrap_content"
@@ -101,4 +101,13 @@
             </TableRow>
         </TableLayout>
     </RelativeLayout>
+    <GridView
+        android:id="@+id/gridView_user_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relativeLayout_content_user_main"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="5dp"
+        android:numColumns="2"/>
 </RelativeLayout>

@@ -7,6 +7,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.gm.qrscaner_zxingbased.CaptureActivity;
+import com.gm.smartHomePlatform.Device.BaseDevice;
+import com.gm.smartHomePlatform.Device.DeviceListAdapter;
 import com.gm.smartHomePlatform.R;
 
 import android.Manifest;
@@ -18,15 +20,21 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class act_user_main extends AppCompatActivity implements View.OnClickListener {
+import java.util.ArrayList;
+
+public class act_user_main extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
     private final int REQUEST_SCAN_QRCODE = 0;
     Button button_add_device;
     TextView text_welcome,text_temperature,text_humidity,text_co,text_gas;
+    GridView gridView;
     String USER;
+    private ArrayList<BaseDevice> device_list;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +57,11 @@ public class act_user_main extends AppCompatActivity implements View.OnClickList
         text_humidity = (TextView) findViewById(R.id.textHumidity_user_main);
         text_co = (TextView) findViewById(R.id.textCO_user_main);
         text_gas = (TextView) findViewById(R.id.textGas_user_main);
+        device_list = BaseDevice.getTestList();
+        gridView = (GridView) findViewById(R.id.gridView_user_main);
+        DeviceListAdapter deviceListAdapter = new DeviceListAdapter(act_user_main.this,device_list);
+        gridView.setAdapter(deviceListAdapter);
+        gridView.setOnItemClickListener(act_user_main.this);
     }
     @Override
     public void onClick(View v) {
@@ -79,5 +92,11 @@ public class act_user_main extends AppCompatActivity implements View.OnClickList
         if (requestCode == REQUEST_SCAN_QRCODE && resultCode == CaptureActivity.RESULT_OK) {
             Toast.makeText(act_user_main.this,""+data.getExtras().getString("ResultQRCode"),Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        System.out.println("已点击");
+        Toast.makeText(act_user_main.this,device_list.get(position).getName(),Toast.LENGTH_LONG).show();
     }
 }

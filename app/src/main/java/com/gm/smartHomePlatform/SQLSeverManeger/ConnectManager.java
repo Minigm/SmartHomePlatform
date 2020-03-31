@@ -11,7 +11,7 @@ public class ConnectManager {
     //用于实例化的私有Connection变量
     private Connection connection;
     //用于登录口令的类静态变量们
-    static final String url_local = "jdbc:mysql://192.168.1.200:3306/smarthome";
+    static final String url_local = "jdbc:mysql://192.168.1.2:3306/smarthome";
     static final String url_net = "jdbc:mysql://111.175.77.137:3306/smarthome";
     static final String username_admin = "admin";
     static final String password_admin = "###0O0O00o0";
