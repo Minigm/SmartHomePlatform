@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.gm.smartHomePlatform"
-        minSdkVersion 26
+        minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -36,5 +36,8 @@ dependencies {
     implementation files('libs/mysql-connector-java-5.1.47-bin.jar')
     implementation 'org.jetbrains:annotations-java5:15.0'
     implementation 'com.google.zxing:core:3.3.3'
-    implementation files('libs\\QRScaner.aar')
+    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
+    implementation project(path: ':GMCompanyModule')
+    implementation project(path: ':PlatformBaseDevice')
+    implementation project(path: ':PlatformQRScaner')
 }

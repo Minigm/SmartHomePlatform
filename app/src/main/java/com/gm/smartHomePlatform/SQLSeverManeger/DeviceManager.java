@@ -1,13 +1,17 @@
 package com.gm.smartHomePlatform.SQLSeverManeger;
 
+import com.example.gmcompany.devices.GMCompanyDeviceHelper;
+import com.gm.basedevice.BaseDevice;
 import com.gm.smartHomePlatform.Administrator.Table.TableDevice;
 
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class DeviceManager {
@@ -37,6 +41,23 @@ public class DeviceManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+    //用于判断用户是否添加设备。0，添加了；1，没有；2，未知错误
+    public int isDeviceId(String id){
+        sql = "select count(*) from devices where device_id = '"+id+"'";
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            resultSet.next();
+            if (resultSet.getInt(1) == 0){
+                this.close(statement,resultSet);return 1;
+            }else {
+                this.close(statement,resultSet);return 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 2;
     }
     //用于判断用户是否添加设备。0，添加了；1，没有；2，未知错误
     public int isDeviceUser(String userName){
@@ -367,6 +388,89 @@ public class DeviceManager {
             }
         }
         return 4;
+    }
+    //添加设备。0设备已存在，1添加成功，2未知错误。
+    public int addDevice(String id,String owner,
+                         String name,String type,
+                         String company,String project){
+        BaseDevice device = new BaseDevice(owner,name,company,project,type,id);
+        CompanyHelper companyHelper = new CompanyHelper(device);
+        switch (isDeviceId(id)){
+            case 0:
+                return 0;
+            case 1:
+                sql = "insert into devices (device_id,device_owner,device_name," +
+                        "device_type,device_company,device_project) " +
+                        "values(?,?,?,?,?,?)";
+                try {
+                    PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                    preparedStatement.setString(1,id);
+                    preparedStatement.setString(2,owner);
+                    preparedStatement.setString(3,name);
+                    preparedStatement.setString(4,type);
+                    preparedStatement.setString(5,company);
+                    preparedStatement.setString(6,project);
+                    preparedStatement.executeUpdate();
+                    companyHelper.addDevice();
+                    return 1;
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+        }
+        return 2;
+    }
+    //获得基本设备列表
+    public List<BaseDevice> getUserDevice(String owner){
+        List<BaseDevice> list = new ArrayList<BaseDevice>();
+        switch (this.isDeviceUser(owner)){
+            case 0:
+                BaseDevice baseDevice_0;
+                String name,type,company,project,id;
+                sql = "select * from devices where device_owner = '"+owner+"'";
+                try {
+                    Statement statement = connection.createStatement();
+                    ResultSet resultSet = statement.executeQuery(sql);
+                    while (resultSet.next()){
+                        name = resultSet.getString("device_name");
+                        type = resultSet.getString("device_type");
+                        company = resultSet.getString("device_company");
+                        project = resultSet.getString("device_project");
+                        id = resultSet.getString("device_id");
+                        baseDevice_0 = new BaseDevice(owner,name,company,project,type,id);
+                        CompanyHelper companyHelper = new CompanyHelper(baseDevice_0);
+                        BaseDevice device_tran = new BaseDevice(owner,name,company,project,type,id,companyHelper.setDevice());
+                        list.add(device_tran);
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }break;
+            case 1:
+                BaseDevice baseDevice_1 = new BaseDevice("","无1","","","","");
+                list.add(baseDevice_1);break;
+            default:
+                BaseDevice baseDevice_2 = new BaseDevice("","无","","","","");
+                list.add(baseDevice_2);break;
+        }
+        return list;
+    }
+    //更新设备acts
+    public void updateDevice(String message,ArrayList<BaseDevice> list){
+        String[] trans = message.split(";");
+        String company = trans[0];
+        String id = trans[1];
+        String type = trans[2];
+        BaseDevice device;
+        for (int i = 0;i < list.size();i++){
+            device = list.get(i);
+            if (device.getCompany().equals(company)&&device.getType().equals(type)&&device.getId().equals(id)){
+                switch (company){
+                    case "GMCompany":
+                        GMCompanyDeviceHelper gmCompanyDeviceHelper = new GMCompanyDeviceHelper();
+                        gmCompanyDeviceHelper.updateDevice(device,message);
+                        System.out.println("进入@#￥%");
+                }
+            }
+        }
     }
 }
 

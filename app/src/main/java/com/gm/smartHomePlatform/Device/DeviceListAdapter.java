@@ -8,20 +8,28 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.gmcompany.devices.GMCompanyDeviceHelper;
+import com.gm.basedevice.BaseDevice;
 import com.gm.smartHomePlatform.R;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class DeviceListAdapter extends BaseAdapter {
     private Context mContext;
-    private ArrayList<BaseDevice> mDeviceList;
-    public DeviceListAdapter(Context context,ArrayList<BaseDevice> list){
+    private ArrayList<BaseDevice> mDeviceList = new ArrayList<BaseDevice>();
+    public DeviceListAdapter(Context context, ArrayList<BaseDevice> list){
         mContext = context;
-        mDeviceList = list;
+        mDeviceList.clear();
+        mDeviceList.addAll(list);
     }
     @Override
     public int getCount() {
-        return mDeviceList.size();
+        if (mDeviceList != null){
+            return mDeviceList.size();
+        }else {
+            return 0;
+        }
     }
 
     @Override
@@ -36,25 +44,34 @@ public class DeviceListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder;
+        BaseDevice device = mDeviceList.get(position);
+        switch (device.getCompany()){
+            case "GMCompany":
+                GMCompanyDeviceHelper gmCompanyDeviceHelper = new GMCompanyDeviceHelper();
+                if (gmCompanyDeviceHelper.isSetAdapter()){
+                    convertView = gmCompanyDeviceHelper.getConvertView(device,mContext);
+                    return convertView;
+                }
+        }
+        BaseViewHolder viewHolder;
         if (convertView == null){
-            viewHolder = new ViewHolder();
+            viewHolder = new BaseViewHolder();
             convertView = LayoutInflater.from(mContext).inflate(R.layout.lay_device_item,null);
             viewHolder.text_name = convertView.findViewById(R.id.textName_item);
             viewHolder.text_value = convertView.findViewById(R.id.textValue_item);
             viewHolder.image_item = convertView.findViewById(R.id.imageView_item);
             convertView.setTag(viewHolder);
         }else {
-            viewHolder = (ViewHolder) convertView.getTag();
+            viewHolder = (BaseViewHolder) convertView.getTag();
         }
-        BaseDevice device = mDeviceList.get(position);
+
         viewHolder.image_item.setImageResource(R.drawable.launcher_icon);
         viewHolder.text_name.setText(device.getName());
-        viewHolder.text_value.setText("测量属性测试");
+        viewHolder.text_value.setText("企业未设置");
         return convertView;
     }
 
-    private final class ViewHolder{
+    private final class BaseViewHolder{
         public TextView text_name;
         public TextView text_value;
         public ImageView image_item;
