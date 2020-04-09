@@ -2,10 +2,12 @@ package com.example.gmcompany.devices;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.gmcompany.MQTT.GMCompanyService;
 import com.example.gmcompany.MQTT.MQTTManager;
 import com.example.gmcompany.R;
 import com.gm.basedevice.BaseDevice;
@@ -13,8 +15,12 @@ import com.gm.basedevice.BaseDevice;
 import java.util.ArrayList;
 
 public class GMCompanyDeviceHelper {
-    static private boolean isOn = true;
-    public String getAddMessage(BaseDevice device){
+    public static void onService(Context context,String user){
+        Intent intent = new Intent(context, GMCompanyService.class);
+        intent.putExtra("user",user);
+        context.startService(intent);
+    }
+    private String getAddMessage(BaseDevice device){
         return (device.getId()+";"+device.getType()+";"+device.getOwner()+";");
     }
     public void addDevice(BaseDevice device){
@@ -24,7 +30,8 @@ public class GMCompanyDeviceHelper {
             mqttManager.disconnect();
         }
     }
-    public String[] setActs(BaseDevice device){
+    //获得设备的acts属性
+    public String[] getActs(BaseDevice device){
         if (device.getProject().equals("smarthome01")){
             if (device.getType().equals("CO2Sensor")){
                 return new String[]{"density","0.0","state","off"};
@@ -48,20 +55,6 @@ public class GMCompanyDeviceHelper {
         return null;
     }
     public boolean isSetAdapter(){
-        return true;
-    }
-    static public boolean onServer(Context context){
-        if (isOn) {
-            ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-            ArrayList<ActivityManager.RunningServiceInfo> list = (ArrayList<ActivityManager.RunningServiceInfo>) manager.getRunningServices(200);
-            for (int i = 0;i < list.size();i++){
-                if (list.get(i).service.getClassName().toString().equals("com.example.gmcompany.MQTT.GMCompanyService")){
-                    isOn = false;
-                    return true;
-                }
-            }
-            return false;
-        }
         return true;
     }
     static public String getBroadcastName = "com.example.gmcompany.mqtt.update";

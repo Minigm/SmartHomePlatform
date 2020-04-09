@@ -13,18 +13,21 @@ public class CompanyHelper {
     public void addDevice(){
         switch (device.getCompany()){
             case "GMCompany":
-                System.out.println("进入1");
                 GMCompanyDeviceHelper gmCompanyDeviceHelper = new GMCompanyDeviceHelper();
                 gmCompanyDeviceHelper.addDevice(device);break;
         }
     }
-    public String[] setDevice(){
+    public String[] getActs(){
         switch (device.getCompany()){
             case "GMCompany":
-                System.out.println("进入2");
                 GMCompanyDeviceHelper gmCompanyDeviceHelper = new GMCompanyDeviceHelper();
-                return gmCompanyDeviceHelper.setActs(this.device);
+                return gmCompanyDeviceHelper.getActs(this.device);
         }
         return new String[]{""};
+    }
+    public BaseDevice getDevice(){
+        return new BaseDevice(device.getOwner(),device.getName(),
+                device.getCompany(),device.getProject(),device.getType(),
+                device.getId(),this.getActs());
     }
 }

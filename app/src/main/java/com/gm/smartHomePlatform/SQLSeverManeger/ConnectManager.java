@@ -22,7 +22,7 @@ public class ConnectManager {
         Connection connection_temp = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            connection_temp = (Connection) DriverManager.getConnection(url_local,username_admin,password_admin);
+            connection_temp = (Connection) DriverManager.getConnection(url_net,username_admin,password_admin);
             System.out.println("连接成功");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

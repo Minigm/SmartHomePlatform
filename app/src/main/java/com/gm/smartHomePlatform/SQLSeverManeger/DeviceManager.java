@@ -393,7 +393,7 @@ public class DeviceManager {
     public int addDevice(String id,String owner,
                          String name,String type,
                          String company,String project){
-        BaseDevice device = new BaseDevice(owner,name,company,project,type,id);
+        BaseDevice device = new BaseDevice(owner,name,company,project,type,id,new String[1]);
         CompanyHelper companyHelper = new CompanyHelper(device);
         switch (isDeviceId(id)){
             case 0:
@@ -436,19 +436,18 @@ public class DeviceManager {
                         company = resultSet.getString("device_company");
                         project = resultSet.getString("device_project");
                         id = resultSet.getString("device_id");
-                        baseDevice_0 = new BaseDevice(owner,name,company,project,type,id);
+                        baseDevice_0 = new BaseDevice(owner,name,company,project,type,id,new String[1]);
                         CompanyHelper companyHelper = new CompanyHelper(baseDevice_0);
-                        BaseDevice device_tran = new BaseDevice(owner,name,company,project,type,id,companyHelper.setDevice());
-                        list.add(device_tran);
+                        list.add(companyHelper.getDevice());
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }break;
             case 1:
-                BaseDevice baseDevice_1 = new BaseDevice("","无1","","","","");
+                BaseDevice baseDevice_1 = new BaseDevice("","无1","","","","",new String[1]);
                 list.add(baseDevice_1);break;
             default:
-                BaseDevice baseDevice_2 = new BaseDevice("","无","","","","");
+                BaseDevice baseDevice_2 = new BaseDevice("","无","","","","",new String[1]);
                 list.add(baseDevice_2);break;
         }
         return list;

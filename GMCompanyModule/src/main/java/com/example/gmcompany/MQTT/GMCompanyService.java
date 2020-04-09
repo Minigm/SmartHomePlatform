@@ -43,11 +43,12 @@ public class GMCompanyService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        user = intent.getStringExtra("user");
-        mqttManager = new MQTTManager("Phone Service","","",callback);
-        mqttManager.subscribe("Update_"+user,1);
-        mqttManager.subscribe("Warning_"+user,1);
-        return super.onStartCommand(intent, flags, startId);
+            user = intent.getStringExtra("user");
+            mqttManager = new MQTTManager("Phone Service"+user,"","",callback);
+            mqttManager.subscribe("Update_"+user,1);
+            mqttManager.subscribe("Warning_"+user,1);
+            System.out.println("进入！");
+        return START_REDELIVER_INTENT;
     }
 
     @Override

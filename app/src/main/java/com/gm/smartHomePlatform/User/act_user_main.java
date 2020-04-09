@@ -41,25 +41,30 @@ import java.util.ArrayList;
 
 public class act_user_main extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
     private final int REQUEST_SCAN_QRCODE = 0;
+    //页面内控件
     Button button_add_device,button_confirm_add;
     TextView text_welcome,text_temperature,text_humidity,text_co,text_gas;
     RelativeLayout lay_add,lay_top,lay_value;
     EditText edit_device_name;
     GridView gridView;
     String USER;
+    //子线程标志
     boolean INTERNET_FLAG = false;
     int THREAD_STATE = 0;
+    //页面内消息
     int ADD_DEVICE = 0,ADD_SUCCESS = 1,REFRESH = 2,UPDATE = 3;
     private ArrayList<BaseDevice> device_list = new ArrayList<BaseDevice>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lay_user_main);
+        //隐藏状态栏
         ActionBar actionBar = getSupportActionBar();
         if(actionBar!=null){
             actionBar.hide();
         }
         getWindow().setFlags(WindowManager.LayoutParams. FLAG_FULLSCREEN , WindowManager.LayoutParams. FLAG_FULLSCREEN);
+        //活动初始化部分
         initDevice();
         initView();
         initBroadcast();
@@ -100,12 +105,8 @@ public class act_user_main extends AppCompatActivity implements View.OnClickList
         for (int i = 0;i < device_list.size();i++){
             switch (device_list.get(i).getCompany()){
                 case "GMCompany":
-                    if (!GMCompanyDeviceHelper.onServer(act_user_main.this)){
-                        Intent intent = new Intent(act_user_main.this, GMCompanyService.class);
-                        intent.putExtra("user",USER);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startService(intent);
-                    }
+                    GMCompanyDeviceHelper.onService(act_user_main.this,USER);
+                    System.out.println("尝试打开服务");
             }
         }
     }
