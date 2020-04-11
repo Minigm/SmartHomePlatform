@@ -2,39 +2,39 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/relative_co2">
+    android:id="@+id/relative_humidity">
     <ImageView
-        android:id="@+id/image_co2"
+        android:id="@+id/image_humidity"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:src="@drawable/ic_co2"
+        android:src="@drawable/ic_humidity"
         android:scaleType="fitCenter"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"/>
     <TextView
-        android:id="@+id/text_name_co2"
+        android:id="@+id/text_name_humidity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/image_co2"
-        android:layout_toEndOf="@+id/image_co2"
+        android:layout_alignTop="@+id/image_humidity"
+        android:layout_toEndOf="@+id/image_humidity"
         android:text="名字"
         android:textSize="18dp"
         android:layout_marginTop="5dp"/>
     <TextView
-        android:id="@+id/text_value_co2"
+        android:id="@+id/text_value_humidity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/image_co2"
-        android:layout_below="@+id/text_name_co2"
+        android:layout_toRightOf="@+id/image_humidity"
+        android:layout_below="@+id/text_name_humidity"
         android:text="浓度值"
         android:textSize="18dp"
         android:layout_marginTop="5dp"/>
     <TextView
-        android:id="@+id/text_state_co2"
+        android:id="@+id/text_state_humidity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/text_value_co2"
-        android:layout_toRightOf="@+id/image_co2"
+        android:layout_below="@+id/text_value_humidity"
+        android:layout_toRightOf="@+id/image_humidity"
         android:textSize="12dp"
         android:text="状态"/>
 </RelativeLayout>

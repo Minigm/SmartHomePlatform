@@ -13,6 +13,8 @@ import com.gm.basedevice.BaseDevice;
 import com.gm.qrscaner_zxingbased.CaptureActivity;
 import com.gm.smartHomePlatform.Device.DeviceListAdapter;
 import com.gm.smartHomePlatform.R;
+import com.gm.smartHomePlatform.SQLSeverManeger.CompanyHelper;
+import com.gm.smartHomePlatform.SQLSeverManeger.CompanyManager;
 import com.gm.smartHomePlatform.SQLSeverManeger.DeviceManager;
 
 import android.Manifest;
@@ -48,11 +50,13 @@ public class act_user_main extends AppCompatActivity implements View.OnClickList
     EditText edit_device_name;
     GridView gridView;
     String USER;
+    mReceiver receiver;
     //子线程标志
     boolean INTERNET_FLAG = false;
     int THREAD_STATE = 0;
     //页面内消息
-    int ADD_DEVICE = 0,ADD_SUCCESS = 1,REFRESH = 2,UPDATE = 3;
+    int ADD_DEVICE = 0,ADD_SUCCESS = 1,REFRESH = 2,UPDATE = 3,NOT_ADD = 4;
+
     private ArrayList<BaseDevice> device_list = new ArrayList<BaseDevice>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +74,7 @@ public class act_user_main extends AppCompatActivity implements View.OnClickList
         initBroadcast();
     }
     void initBroadcast(){
-        mReceiver receiver = new mReceiver();
+        receiver = new mReceiver();
         IntentFilter filter = new IntentFilter(GMCompanyDeviceHelper.getBroadcastName);
         act_user_main.this.registerReceiver(receiver,filter);
     }
@@ -106,10 +110,51 @@ public class act_user_main extends AppCompatActivity implements View.OnClickList
             switch (device_list.get(i).getCompany()){
                 case "GMCompany":
                     GMCompanyDeviceHelper.onService(act_user_main.this,USER);
-                    System.out.println("尝试打开服务");
             }
         }
     }
+    void initValue(){
+        float max_CO2Sensor = 0;
+        float max_COSensor = 0;
+        float max_TemperatureSensor = 0;
+        float max_HumiditySensor = 0;
+        float max_Gas = 0;
+        for (int i = 0;i < device_list.size();i++){
+            switch (device_list.get(i).getType()){
+                case "CO2Sensor":
+                    if (Float.parseFloat(device_list.get(i).getAct("density")) >= max_CO2Sensor){
+                        max_CO2Sensor = Float.parseFloat(device_list.get(i).getAct("density"));
+                    }break;
+                case "COSensor":
+                    if (Float.parseFloat(device_list.get(i).getAct("density")) >= max_COSensor){
+                        max_COSensor = Float.parseFloat(device_list.get(i).getAct("density"));
+                    }break;
+                case "TemperatureSensor":
+                    if (Float.parseFloat(device_list.get(i).getAct("temperature")) >= max_TemperatureSensor){
+                        max_TemperatureSensor = Float.parseFloat(device_list.get(i).getAct("temperature"));
+                    }break;
+                case "HumiditySensor":
+                    if (Float.parseFloat(device_list.get(i).getAct("humidity")) >= max_HumiditySensor){
+                        max_HumiditySensor = Float.parseFloat(device_list.get(i).getAct("humidity"));
+                    }break;
+                case "GasSensor":
+                    if (Float.parseFloat(device_list.get(i).getAct("density")) >= max_Gas){
+                        max_Gas = Float.parseFloat(device_list.get(i).getAct("density"));
+                    }break;
+            }
+        }
+        text_co.setText(max_COSensor+"mg/m³");
+        text_temperature.setText(max_TemperatureSensor+"℃");
+        text_humidity.setText(max_HumiditySensor+"%RH");
+        text_gas.setText(max_Gas+"mg/m³");
+    }
+    @Override
+    protected void onDestroy() {
+        INTERNET_FLAG = false;
+        act_user_main.this.unregisterReceiver(receiver);
+        super.onDestroy();
+    }
+
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.buttonAddDevice_user_main){
@@ -121,11 +166,9 @@ public class act_user_main extends AppCompatActivity implements View.OnClickList
                             new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
                 }else {
                     //说明已经获取到摄像头权限了
-                    Log.i("MainActivity","已经获取了权限");
                 }
             }else {
                 //这个说明系统版本在6.0之下，不需要动态获取权限。
-                Log.i("MainActivity","这个说明系统版本在6.0之下，不需要动态获取权限。");
             }
             Intent intent = new Intent(act_user_main.this, CaptureActivity.class);
             startActivityForResult(intent,REQUEST_SCAN_QRCODE);
@@ -160,7 +203,8 @@ public class act_user_main extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(act_user_main.this,device_list.get(position).getName(),Toast.LENGTH_LONG).show();
+        CompanyHelper companyHelper = new CompanyHelper(device_list.get(position));
+        companyHelper.callLayout(act_user_main.this);
     }
 
     private class InternetThread extends Thread{
@@ -190,7 +234,7 @@ public class act_user_main extends AppCompatActivity implements View.OnClickList
                         name = sharedPreferences_2.getString("name","");
                         switch (deviceManager.addDevice(id,USER,name,type,company,project)){
                             case 0:
-                                break;//id设备已经添加过了，请解绑。
+                                mHandler.sendEmptyMessage(NOT_ADD);break;
                             case 1:
                                 mHandler.sendEmptyMessage(ADD_SUCCESS);break;
                         }
@@ -214,6 +258,7 @@ public class act_user_main extends AppCompatActivity implements View.OnClickList
         public void handleMessage(Message msg) {
             if (msg.what == ADD_DEVICE){
                 lay_add.setVisibility(View.VISIBLE);
+                edit_device_name.setText((""));
                 lay_top.setVisibility(View.INVISIBLE);
                 lay_value.setVisibility(View.INVISIBLE);
                 gridView.setVisibility(View.INVISIBLE);
@@ -224,14 +269,23 @@ public class act_user_main extends AppCompatActivity implements View.OnClickList
                 lay_value.setVisibility(View.VISIBLE);
                 gridView.setVisibility(View.VISIBLE);
                 THREAD_STATE = 1;
-            }else if (msg.what == REFRESH){
+            }else if (msg.what == NOT_ADD){
+                Toast.makeText(act_user_main.this,"该设备已被绑定，未添加",Toast.LENGTH_LONG);
+                lay_add.setVisibility(View.INVISIBLE);
+                lay_top.setVisibility(View.VISIBLE);
+                lay_value.setVisibility(View.VISIBLE);
+                gridView.setVisibility(View.VISIBLE);
+                THREAD_STATE = 1;
+            } else if (msg.what == REFRESH){
                 DeviceListAdapter deviceListAdapter = new DeviceListAdapter(act_user_main.this,device_list);
                 gridView.setAdapter(deviceListAdapter);
                 gridView.setOnItemClickListener(act_user_main.this);
+                initValue();
                 initService();
             }else if (msg.what == UPDATE){
                 DeviceListAdapter deviceListAdapter = new DeviceListAdapter(act_user_main.this,device_list);
                 gridView.setAdapter(deviceListAdapter);
+                initValue();
             }
         }
     };
@@ -240,7 +294,6 @@ public class act_user_main extends AppCompatActivity implements View.OnClickList
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            Toast.makeText(context,"试试",Toast.LENGTH_LONG).show();
             if (intent != null){
                 System.out.println("收到更新！");
                 String message = intent.getStringExtra("message");

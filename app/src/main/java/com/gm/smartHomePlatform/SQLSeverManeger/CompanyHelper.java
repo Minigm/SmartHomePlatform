@@ -1,5 +1,7 @@
 package com.gm.smartHomePlatform.SQLSeverManeger;
 
+import android.content.Context;
+
 import com.example.gmcompany.devices.GMCompanyDeviceHelper;
 import com.gm.basedevice.BaseDevice;
 
@@ -25,9 +27,25 @@ public class CompanyHelper {
         }
         return new String[]{""};
     }
+    public String getActString(){
+        String trans = "";
+        String[] tans_loo = this.getActs();
+        for (int i = 0;i < tans_loo.length;i++){
+            trans = trans +tans_loo[i]+";";
+            i++;
+        }
+        return trans;
+    }
     public BaseDevice getDevice(){
         return new BaseDevice(device.getOwner(),device.getName(),
                 device.getCompany(),device.getProject(),device.getType(),
                 device.getId(),this.getActs());
+    }
+    public void callLayout(Context context){
+        switch (device.getCompany()){
+            case "GMCompany":
+                GMCompanyDeviceHelper gmCompanyDeviceHelper = new GMCompanyDeviceHelper();
+                gmCompanyDeviceHelper.callLayout(device,context);
+        }
     }
 }

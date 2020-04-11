@@ -301,6 +301,8 @@ public class CompanyManager {
                         preparedStatement.setString(3,device);
                         preparedStatement.setString(4,acts);
                         preparedStatement.executeUpdate();
+                        UserManager userManager = new UserManager();
+                        userManager.addUser(name,"123456","1");
                         return 6;
                     } catch (SQLException e) {
                         e.printStackTrace();

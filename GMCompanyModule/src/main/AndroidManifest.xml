@@ -4,6 +4,7 @@
     package="com.example.gmcompany">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:allowBackup="true"
@@ -12,7 +13,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".act_CO2Senser"></activity>
+        <activity android:name=".devices.act_GasSensor"></activity>
+        <activity android:name=".devices.act_HumiditySensor" />
+        <activity android:name=".devices.act_TemperatureSensor" />
+        <activity android:name=".devices.act_COSensor" />
+        <activity android:name=".devices.act_CO2Sensor" />
 
         <service
             android:name=".MQTT.GMCompanyService"

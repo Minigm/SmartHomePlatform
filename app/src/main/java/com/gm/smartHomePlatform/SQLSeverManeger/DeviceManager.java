@@ -2,6 +2,7 @@ package com.gm.smartHomePlatform.SQLSeverManeger;
 
 import com.example.gmcompany.devices.GMCompanyDeviceHelper;
 import com.gm.basedevice.BaseDevice;
+import com.gm.smartHomePlatform.Administrator.Table.TableCompany;
 import com.gm.smartHomePlatform.Administrator.Table.TableDevice;
 
 
@@ -412,6 +413,9 @@ public class DeviceManager {
                     preparedStatement.setString(6,project);
                     preparedStatement.executeUpdate();
                     companyHelper.addDevice();
+                    CompanyManager companyManager = new CompanyManager();
+                    TableCompany company1 = new TableCompany(company,project,type,companyHelper.getActString());
+                    companyManager.addCompany(company1);
                     return 1;
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -466,7 +470,6 @@ public class DeviceManager {
                     case "GMCompany":
                         GMCompanyDeviceHelper gmCompanyDeviceHelper = new GMCompanyDeviceHelper();
                         gmCompanyDeviceHelper.updateDevice(device,message);
-                        System.out.println("进入@#￥%");
                 }
             }
         }

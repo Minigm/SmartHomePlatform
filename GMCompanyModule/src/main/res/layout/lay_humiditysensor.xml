@@ -4,40 +4,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".devices.act_CO2Sensor">
+    tools:context=".devices.act_HumiditySensor">
     <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/chart_co2sensor"
+        android:id="@+id/chart_humiditysensor"
         android:layout_height="300dp"
         android:layout_width="match_parent"
         android:background="@android:color/white"/>
     <TextView
-        android:id="@+id/text_state_co2sensor"
+        android:id="@+id/text_state_humiditysensor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/chart_co2sensor"
+        android:layout_below="@+id/chart_humiditysensor"
         android:text="状态："
         android:textSize="20dp"/>
     <Button
-        android:id="@+id/buttonBack_co2sensor"
+        android:id="@+id/buttonBack_humiditysensor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:text="返回"
-        android:onClick="buttonBack_co2sensorOnClick"/>
+        android:onClick="buttonBack_humiditysensorOnClick"/>
     <Button
-        android:id="@+id/buttonOn_co2sensor"
+        android:id="@+id/buttonOn_humiditysensor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="打开"
-        android:onClick="buttonOn_co2sensorOnClick"/>
+        android:onClick="buttonOn_humiditysensorOnClick"/>
     <Button
-        android:id="@+id/buttonOff_co2sensor"
+        android:id="@+id/buttonOff_humiditysensor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/buttonOn_co2sensor"
+        android:layout_below="@+id/buttonOn_humiditysensor"
         android:layout_centerHorizontal="true"
         android:text="关闭"
-        android:onClick="buttonOff_co2sensorOnClick"/>
+        android:onClick="buttonOff_humiditysensorOnClick"/>
 </RelativeLayout>

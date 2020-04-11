@@ -68,7 +68,7 @@ public class MQTTManager {
     }
     private void initMqtt_call(){
         try {
-            mqttClient = new MqttClient(host_local,id,new MemoryPersistence());
+            mqttClient = new MqttClient(host_net,id,new MemoryPersistence());
             options = new MqttConnectOptions();
             options.setCleanSession(true);
             //options.setUserName(username);
