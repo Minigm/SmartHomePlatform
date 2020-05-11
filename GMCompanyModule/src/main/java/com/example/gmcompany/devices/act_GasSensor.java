@@ -1,5 +1,6 @@
 package com.example.gmcompany.devices;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.BroadcastReceiver;
@@ -12,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.example.gmcompany.MQTT.MQTTManager;
@@ -40,6 +42,11 @@ public class act_GasSensor extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lay_gassensor);
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar!=null){
+            actionBar.hide();
+        }
+        getWindow().setFlags(WindowManager.LayoutParams. FLAG_FULLSCREEN , WindowManager.LayoutParams. FLAG_FULLSCREEN);
         Intent intent = getIntent();
         id = intent.getStringExtra("id");
         chart = (LineChart) findViewById(R.id.chart_gassensor);
